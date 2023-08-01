@@ -7,10 +7,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:test;MODE=MySQL
-    driver-class-name: org.h2.Driver
-    username: ${rds.username}
-    password: ${rds.password}
+    url: jdbc:mysql://${RDS_HOSTNAME:localhost}:${RDS_PORT:3306}/${RDS_DB_NAME:bank-shop-database}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${RDS_USERNAME:bank-shop-user}
+    password: ${RDS_PASSWORD:dummypassword}
 
   jpa:
     open-in-view: false
