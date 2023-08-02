@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.loader.entity.AbstractEntityLoader;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
-@EntityListeners(AbstractEntityLoader.class)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user_tb")
 @Entity
 public class User {
