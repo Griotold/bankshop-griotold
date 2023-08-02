@@ -29,7 +29,7 @@ spring:
 #    pathmatch:
 #      matching-strategy: ant_path_matcher
 
-  logging:
-    level:
-      '[com.griotold.bankshop]': DEBUG
-      '[org.hibernate.type]': TRACE
+logging:
+  level:
+    '[com.griotold.bankshop]': DEBUG
+    '[org.hibernate.type]': TRACE

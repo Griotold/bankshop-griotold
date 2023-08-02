@@ -23,6 +23,6 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  logging:
-    level:
-      '[com.griotold.bankshop]': INFO
+logging:
+  level:
+    '[com.griotold.bankshop]': INFO

@@ -29,6 +29,6 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-  logging:
-    level:
-      '[com.griotold.bankshop]': DEBUG
+logging:
+  level:
+    '[com.griotold.bankshop]': DEBUG
