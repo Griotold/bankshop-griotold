@@ -31,8 +31,8 @@ class SecurityConfigTest {
         int status = resultActions.andReturn().getResponse().getStatus();
 
         // then
-        assertThat(jsonPath("$.msg").value("로그인을 해주세요."));
         assertThat(status).isEqualTo(401);
+        resultActions.andExpect(jsonPath("$.msg").value("로그인을 해주세요."));
 
     }
 
@@ -48,8 +48,9 @@ class SecurityConfigTest {
         int status = resultActions.andReturn().getResponse().getStatus();
 
         // then
-        assertThat(jsonPath("$.msg").value("권한이 없습니다."));
-        assertThat(status).isEqualTo(403);
+        assertThat(status).isEqualTo(401);
+        resultActions.andExpect(jsonPath("$.msg").value("로그인을 해주세요."));
+
     }
 
 }

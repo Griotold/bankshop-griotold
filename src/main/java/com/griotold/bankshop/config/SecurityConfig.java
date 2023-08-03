@@ -2,6 +2,7 @@ package com.griotold.bankshop.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.griotold.bankshop.config.jwt.JwtAuthenticationFilter;
+import com.griotold.bankshop.config.jwt.JwtAuthorizationFilter;
 import com.griotold.bankshop.user.UserEnum;
 import com.griotold.bankshop.utils.CustomResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class SecurityConfig {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
             builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
+            builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
             super.configure(builder);
         }
     }
@@ -54,16 +56,17 @@ public class SecurityConfig {
 
         http.apply(new CustomSecurityFilterManager());
 
+        http.exceptionHandling().accessDeniedHandler((request, response, e) -> {
+            CustomResponseUtil.fail(response, "권한이 없습니다.", HttpStatus.FORBIDDEN);
+        });
+
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             String uri = request.getRequestURI();
             log.debug("디버그 : {}", uri);
-            if (uri.contains("admin")) {
-                CustomResponseUtil.fail(response, "권한이 없습니다.", HttpStatus.FORBIDDEN);
-            } else {
-
-                CustomResponseUtil.fail(response, "로그인을 해주세요.", HttpStatus.UNAUTHORIZED);
-            }
+            CustomResponseUtil.fail(response, "로그인을 해주세요.", HttpStatus.UNAUTHORIZED);
         });
+
+
 
         http.authorizeRequests()
                 .antMatchers("/api/s/**").authenticated()

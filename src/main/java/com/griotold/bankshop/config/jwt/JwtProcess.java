@@ -2,6 +2,7 @@ package com.griotold.bankshop.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.griotold.bankshop.config.auth.LoginUser;
 import com.griotold.bankshop.user.User;
@@ -23,12 +24,17 @@ public class JwtProcess {
     }
 
     public static LoginUser verify(String token) {
-        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtVO.SECRET)).build().verify(token);
-        Long id = decodedJWT.getClaim("id").asLong();
-        String role = decodedJWT.getClaim("role").asString();
-        User user = User.builder().id(id).role(UserEnum.valueOf(role)).build();
-        LoginUser loginUser = new LoginUser(user);
-        return loginUser;
+        try{
+            DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC512(JwtVO.SECRET)).build().verify(token);
+            Long id = decodedJWT.getClaim("id").asLong();
+            String role = decodedJWT.getClaim("role").asString();
+            User user = User.builder().id(id).role(UserEnum.valueOf(role)).build();
+            LoginUser loginUser = new LoginUser(user);
+            return loginUser;
+        } catch (JWTVerificationException e) {
+            log.error("토큰 검증 실패: " + e.getMessage());
+            throw e;
+        }
 
     }
 }
