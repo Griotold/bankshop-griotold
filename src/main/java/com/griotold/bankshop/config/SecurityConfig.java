@@ -1,6 +1,7 @@
 package com.griotold.bankshop.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.griotold.bankshop.config.jwt.JwtAuthenticationFilter;
 import com.griotold.bankshop.user.UserEnum;
 import com.griotold.bankshop.utils.CustomResponseUtil;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,6 +32,15 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    static class CustomSecurityFilterManager extends AbstractHttpConfigurer<CustomSecurityFilterManager, HttpSecurity>{
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+            builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
+            super.configure(builder);
+        }
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.headers().frameOptions().disable();
@@ -39,6 +51,8 @@ public class SecurityConfig {
 
         http.formLogin().disable();
         http.httpBasic().disable();
+
+        http.apply(new CustomSecurityFilterManager());
 
         http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
             String uri = request.getRequestURI();
