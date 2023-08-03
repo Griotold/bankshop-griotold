@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-        log.debug("디버그 : attempAuthentication 호출됨");
+        log.debug("디버그 : attemptAuthentication 호출됨");
         try {
             ObjectMapper om = new ObjectMapper();
             LoginReqDto loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
@@ -64,5 +64,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         LoginRespDto loginRespDto = new LoginRespDto(loginUser.getUser());
         CustomResponseUtil.success(response, loginRespDto, HttpStatus.OK);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response
+            , AuthenticationException failed) throws IOException, ServletException {
+        log.debug("디버그 : 로그인 실패 - unsuccessfulAuthentication 호출됨");
+        CustomResponseUtil.fail(response, "로그인 실패", HttpStatus.BAD_REQUEST);
     }
 }
