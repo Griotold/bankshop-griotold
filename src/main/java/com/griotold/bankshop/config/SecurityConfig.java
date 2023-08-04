@@ -60,14 +60,6 @@ public class SecurityConfig {
             CustomResponseUtil.fail(response, "권한이 없습니다.", HttpStatus.FORBIDDEN);
         });
 
-        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-            String uri = request.getRequestURI();
-            log.debug("디버그 : {}", uri);
-            CustomResponseUtil.fail(response, "로그인을 해주세요.", HttpStatus.UNAUTHORIZED);
-        });
-
-
-
         http.authorizeRequests()
                 .antMatchers("/api/s/**").authenticated()
                 .antMatchers("/api/admin/**").hasRole(UserEnum.ADMIN.name())
