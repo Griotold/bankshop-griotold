@@ -1,10 +1,8 @@
 package com.griotold.bankshop.service;
 
-import com.griotold.bankshop.dto.user.UserReqDto;
-import com.griotold.bankshop.dto.user.UserRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserRepository;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

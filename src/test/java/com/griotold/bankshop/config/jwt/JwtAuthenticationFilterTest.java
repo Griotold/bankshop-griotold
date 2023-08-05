@@ -2,9 +2,7 @@ package com.griotold.bankshop.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.griotold.bankshop.config.dummy.DummyObject;
-import com.griotold.bankshop.dto.user.UserReqDto;
-import com.griotold.bankshop.user.UserRepository;
-import org.assertj.core.api.Assertions;
+import com.griotold.bankshop.domain.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
-
 import static com.griotold.bankshop.dto.user.UserReqDto.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

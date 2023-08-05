@@ -1,9 +1,8 @@
-package com.griotold.bankshop.user;
+package com.griotold.bankshop.domain.user;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.loader.entity.AbstractEntityLoader;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

@@ -1,11 +1,8 @@
 package com.griotold.bankshop.service;
 
 import com.griotold.bankshop.config.dummy.DummyObject;
-import com.griotold.bankshop.dto.user.UserReqDto;
-import com.griotold.bankshop.dto.user.UserRespDto;
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserEnum;
-import com.griotold.bankshop.user.UserRepository;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +12,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.griotold.bankshop.dto.user.UserReqDto.*;
 import static com.griotold.bankshop.dto.user.UserRespDto.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 

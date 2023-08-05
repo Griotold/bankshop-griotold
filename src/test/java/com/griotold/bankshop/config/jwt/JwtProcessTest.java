@@ -2,14 +2,12 @@ package com.griotold.bankshop.config.jwt;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.griotold.bankshop.config.auth.LoginUser;
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserEnum;
-import org.assertj.core.api.Assertions;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class JwtProcessTest {
 

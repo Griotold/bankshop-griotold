@@ -1,6 +1,6 @@
 package com.griotold.bankshop.dto.user;
 
-import com.griotold.bankshop.user.User;
+import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.utils.CustomDateUtil;
 import lombok.Getter;
 import lombok.Setter;

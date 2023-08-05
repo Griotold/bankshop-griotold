@@ -3,7 +3,7 @@ package com.griotold.bankshop.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.griotold.bankshop.config.jwt.JwtAuthenticationFilter;
 import com.griotold.bankshop.config.jwt.JwtAuthorizationFilter;
-import com.griotold.bankshop.user.UserEnum;
+import com.griotold.bankshop.domain.user.UserEnum;
 import com.griotold.bankshop.utils.CustomResponseUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

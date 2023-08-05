@@ -5,8 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.griotold.bankshop.config.auth.LoginUser;
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserEnum;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;

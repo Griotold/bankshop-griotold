@@ -1,9 +1,8 @@
 package com.griotold.bankshop.config.auth;
 
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserRepository;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

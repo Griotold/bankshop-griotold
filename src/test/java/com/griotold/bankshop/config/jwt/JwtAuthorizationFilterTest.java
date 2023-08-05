@@ -1,8 +1,8 @@
 package com.griotold.bankshop.config.jwt;
 
 import com.griotold.bankshop.config.auth.LoginUser;
-import com.griotold.bankshop.user.User;
-import com.griotold.bankshop.user.UserEnum;
+import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.domain.user.UserEnum;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

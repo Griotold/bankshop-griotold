@@ -1,6 +1,6 @@
 package com.griotold.bankshop.config.auth;
 
-import com.griotold.bankshop.user.User;
+import com.griotold.bankshop.domain.user.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
