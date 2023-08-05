@@ -21,7 +21,7 @@ public class ItemRespDto {
             this.itemName = item.getItemName();
             this.price = item.getPrice();
             this.stockNumber = item.getStockNumber();
-            this.itemSellStatus = getItemSellStatus();
+            this.itemSellStatus = item.getItemSellStatus().toString();
         }
     }
 }
