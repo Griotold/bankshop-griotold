@@ -66,7 +66,7 @@ class ItemControllerTest extends DummyObject {
         System.out.println("requestBody = " + requestBody);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/admin/item")
+        ResultActions resultActions = mvc.perform(post("/api/admin/items")
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON));
 
@@ -91,7 +91,7 @@ class ItemControllerTest extends DummyObject {
         System.out.println("requestBody = " + requestBody);
 
         // when
-        ResultActions resultActions = mvc.perform(post("/api/admin/item")
+        ResultActions resultActions = mvc.perform(post("/api/admin/items")
                 .content(requestBody)
                 .contentType(MediaType.APPLICATION_JSON));
 

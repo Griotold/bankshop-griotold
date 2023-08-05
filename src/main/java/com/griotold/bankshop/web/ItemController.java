@@ -24,11 +24,18 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @PostMapping("/admin/item")
+    @PostMapping("/admin/items")
     public ResponseEntity<?> registerItem(@RequestBody @Valid ItemRegisterReqDto itemRegisterReqDto,
                                           BindingResult bindingResult) {
         ItemRegisterRespDto itemRegisterRespDto = itemService.register(itemRegisterReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "아이템 등록 성공", itemRegisterRespDto),
                 HttpStatus.CREATED);
+    }
+
+    @GetMapping("/items")
+    public ResponseEntity<?> retrieveItemList() {
+        ItemListRespDto itemListRespDto = itemService.itemList();
+        return new ResponseEntity<>(new ResponseDto<>(1, "상품 리스트", itemListRespDto),
+                HttpStatus.OK);
     }
 }

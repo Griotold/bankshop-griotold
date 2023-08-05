@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.griotold.bankshop.dto.item.ItemReqDto.*;
@@ -36,5 +37,10 @@ public class ItemService {
         Item itemPS = itemRepository.save(item);
 
         return new ItemRegisterRespDto(itemPS);
+    }
+
+    public ItemListRespDto itemList() {
+        List<Item> itemListPS = itemRepository.findAll();
+        return new ItemListRespDto(itemListPS);
     }
 }
