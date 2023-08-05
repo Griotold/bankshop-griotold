@@ -13,6 +13,25 @@ public class ItemRespDto {
 
     @Getter
     @Setter
+
+    public static class ItemIdRespDto {
+        private Long id;
+        private String itemName;
+        private int price;
+        private int stockNumber;
+        private String itemSellStatus;
+
+        public ItemIdRespDto(Item item) {
+            this.id = item.getId();
+            this.itemName = item.getItemName();
+            this.price = item.getPrice();
+            this.stockNumber = item.getStockNumber();
+            this.itemSellStatus = item.getItemSellStatus().name();
+        }
+    }
+
+    @Getter
+    @Setter
     public static class ItemListRespDto {
         private List<ItemDto> itemDtos = new ArrayList<>();
 

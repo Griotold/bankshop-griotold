@@ -44,6 +44,12 @@ public class ItemService {
         return new ItemListRespDto(itemListPS);
     }
 
+    public ItemIdRespDto findOne(Long itemId){
+        Item itemPS = itemRepository.findById(itemId).orElseThrow(
+                () -> new CustomApiException("상품을 찾을 수 없습니다."));
+        return new ItemIdRespDto(itemPS);
+    }
+
     @Transactional
     public void deleteItem(Long itemId) {
         Item itemPS = itemRepository.findById(itemId).orElseThrow(

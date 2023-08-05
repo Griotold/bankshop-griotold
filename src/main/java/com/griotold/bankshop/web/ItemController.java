@@ -39,6 +39,13 @@ public class ItemController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/items/{id}")
+    public ResponseEntity<?> retrieveItem(@PathVariable Long id) {
+        ItemIdRespDto itemIdRespDto = itemService.findOne(id);
+        return new ResponseEntity<>(new ResponseDto<>(1, id + "번 상품", itemIdRespDto),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/admin/items/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable Long id) {
         itemService.deleteItem(id);
