@@ -1,5 +1,7 @@
 package com.griotold.bankshop.config.dummy;
 
+import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemSellStatus;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserEnum;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +51,17 @@ public class DummyObject {
                 .role(UserEnum.CUSTOMER)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
+    protected Item newItem(String itemName) {
+
+        return Item.builder()
+                .itemName(itemName)
+                .price(10000)
+                .stockNumber(100)
+                .itemDetail("테스트 아이템 설명")
+                .itemSellStatus(ItemSellStatus.SELL)
                 .build();
     }
 }
