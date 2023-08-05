@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -52,6 +53,34 @@ class JwtAuthorizationFilterTest {
         // then
         resultActions.andExpect(status().isUnauthorized());
     }
+    @Test
+    @DisplayName("admin 성공 테스트")
+    void authorization_admin_success_test() throws Exception {
+        // given
+        User user = User.builder().id(1L).role(UserEnum.ADMIN).build();
+        LoginUser loginUser = new LoginUser(user);
+        String jwtToken = JwtProcess.create(loginUser);
 
-    // todo admin 성공, 실패 테스트
+        // when
+        ResultActions resultActions = mvc.perform(get("/api/admin/hello/test")
+                .header(JwtVO.HEADER, jwtToken));
+
+        // then
+        resultActions.andExpect(status().isNotFound());
+    }
+    @Test
+    @DisplayName("admin 실패 테스트")
+    void authorization_admin_fail_test() throws Exception{
+        // given
+        User user = User.builder().id(1L).role(UserEnum.CUSTOMER).build();
+        LoginUser loginUser = new LoginUser(user);
+        String jwtToken = JwtProcess.create(loginUser);
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/api/admin/hello/test")
+                .header(JwtVO.HEADER, jwtToken));
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+    }
 }
