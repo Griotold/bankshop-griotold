@@ -28,6 +28,7 @@ import java.awt.*;
 
 import static com.griotold.bankshop.dto.item.ItemReqDto.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,11 +47,16 @@ class ItemControllerTest extends DummyObject {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ItemRepository itemRepository;
+
 
     @BeforeEach
     public void setUp() {
         User customer = userRepository.save(newUser("customer", "고객"));
         User admin = userRepository.save(newAdminUser("admin", "관리자"));
+
+        Item item = itemRepository.save(newItem("츄르"));
     }
     @WithUserDetails(value = "admin", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
@@ -63,7 +69,6 @@ class ItemControllerTest extends DummyObject {
         itemRegisterReqDto.setItemDetail("재질이 극세사인 잘 닦이는 안경닦기");
         itemRegisterReqDto.setStockNumber(100);
         String requestBody = om.writeValueAsString(itemRegisterReqDto);
-        System.out.println("requestBody = " + requestBody);
 
         // when
         ResultActions resultActions = mvc.perform(post("/api/admin/items")
@@ -71,7 +76,6 @@ class ItemControllerTest extends DummyObject {
                 .contentType(MediaType.APPLICATION_JSON));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("responseBody = " + responseBody);
 
         // then
         resultActions.andExpect(status().isCreated());
@@ -88,7 +92,6 @@ class ItemControllerTest extends DummyObject {
         itemRegisterReqDto.setItemDetail("재질이 극세사인 잘 닦이는 안경닦기");
         itemRegisterReqDto.setStockNumber(100);
         String requestBody = om.writeValueAsString(itemRegisterReqDto);
-        System.out.println("requestBody = " + requestBody);
 
         // when
         ResultActions resultActions = mvc.perform(post("/api/admin/items")
@@ -96,7 +99,50 @@ class ItemControllerTest extends DummyObject {
                 .contentType(MediaType.APPLICATION_JSON));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("responseBody = " + responseBody);
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+    }
+    @WithUserDetails(value = "admin", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("상품 삭제 정상 테스트")
+    void deleteItem_test() throws Exception{
+        // given
+        long itemId = 1L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/admin/items/" + itemId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+
+    @WithUserDetails(value = "admin", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("상품 삭제 실패 테스트")
+    void deleteItem_fail_test() throws Exception{
+        // given
+        long itemId = 2L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/admin/items/" + itemId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+    }
+
+    @WithUserDetails(value = "customer", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("상품 삭제 권한 테스트")
+    void deleteItem_customer() throws Exception{
+        // given
+        long itemId = 1L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/admin/items/" + itemId));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
 
         // then
         resultActions.andExpect(status().isForbidden());

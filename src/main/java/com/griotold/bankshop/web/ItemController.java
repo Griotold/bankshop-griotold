@@ -38,4 +38,11 @@ public class ItemController {
         return new ResponseEntity<>(new ResponseDto<>(1, "상품 리스트", itemListRespDto),
                 HttpStatus.OK);
     }
+
+    @DeleteMapping("/admin/items/{id}")
+    public ResponseEntity<?> deleteItem(@PathVariable Long id) {
+        itemService.deleteItem(id);
+        return new ResponseEntity<>(new ResponseDto<>(1, "상품 삭제 완료", null),
+                HttpStatus.OK);
+    }
 }
