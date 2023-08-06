@@ -6,8 +6,6 @@ import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
-import com.griotold.bankshop.dto.item.ItemReqDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,12 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.awt.*;
-
-import static com.griotold.bankshop.dto.item.ItemReqDto.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.griotold.bankshop.dto.item.ItemReqDto.ItemRegisterReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

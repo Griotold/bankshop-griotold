@@ -50,6 +50,8 @@ public class ItemService {
         return new ItemIdRespDto(itemPS);
     }
 
+
+
     @Transactional
     public void deleteItem(Long itemId) {
         Item itemPS = itemRepository.findById(itemId).orElseThrow(

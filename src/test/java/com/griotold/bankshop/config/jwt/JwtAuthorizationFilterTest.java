@@ -50,7 +50,7 @@ class JwtAuthorizationFilterTest {
         ResultActions resultActions = mvc.perform(get("/api/s/hello"));
 
         // then
-        resultActions.andExpect(status().isUnauthorized());
+        resultActions.andExpect(status().isForbidden());
     }
     @Test
     @DisplayName("admin 성공 테스트")

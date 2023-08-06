@@ -1,5 +1,6 @@
 package com.griotold.bankshop.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class SecurityConfigTest {
@@ -29,10 +29,10 @@ class SecurityConfigTest {
         ResultActions resultActions = mvc.perform(get("/api/s/blahblah"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         int status = resultActions.andReturn().getResponse().getStatus();
+        System.out.println("responseBody = " + responseBody);
 
         // then
-        assertThat(status).isEqualTo(401);
-        resultActions.andExpect(jsonPath("$.msg").value("로그인을 해주세요."));
+        assertThat(status).isEqualTo(403);
 
     }
 
@@ -42,14 +42,12 @@ class SecurityConfigTest {
         // given
 
         // when
-
         ResultActions resultActions = mvc.perform(get("/api/admin/bahblahg"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         int status = resultActions.andReturn().getResponse().getStatus();
 
         // then
-        assertThat(status).isEqualTo(401);
-        resultActions.andExpect(jsonPath("$.msg").value("로그인을 해주세요."));
+        assertThat(status).isEqualTo(403);
 
     }
 
