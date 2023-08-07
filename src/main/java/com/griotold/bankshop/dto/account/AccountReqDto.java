@@ -11,6 +11,25 @@ public class AccountReqDto {
 
     @Getter
     @Setter
+    public static class AccountDepositReqDto {
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long number;
+
+        @NotNull
+        private Long amount;
+
+        @NotEmpty
+        @Pattern(regexp = "^(DEPOSIT)$")
+        private String transactionType;
+
+        @NotEmpty
+        @Pattern(regexp = "^[0-9]{11}")
+        private String tel;
+    }
+
+    @Getter
+    @Setter
     public static class AccountSaveReqDto {
         @NotNull
         @Max(value = 9999, message = "4자리 숫자를 입력해주세요.")
