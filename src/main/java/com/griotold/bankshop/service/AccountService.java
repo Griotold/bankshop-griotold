@@ -13,6 +13,7 @@ import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.griotold.bankshop.dto.account.AccountReqDto.*;
@@ -42,6 +43,13 @@ public class AccountService {
         Account accountPS = accountRepository.save(account);
 
         return new AccountSaveRespDto(accountPS);
+    }
+
+    public AccountListRespDto accountList(Long userId) {
+        User userPS = userRepository.findById(userId).orElseThrow(()
+                -> new CustomApiException("유저를 찾을 수 없습니다."));
+        List<Account> accountListPS = accountRepository.findByUser_id(userId);
+        return new AccountListRespDto(userPS, accountListPS);
     }
 
 
