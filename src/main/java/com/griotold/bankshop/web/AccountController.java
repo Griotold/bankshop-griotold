@@ -43,6 +43,13 @@ public class AccountController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/admin/accounts")
+    public ResponseEntity<?> retrieveAllAccountList() {
+        AccountListAdminRespDto accountListAdminRespDto = accountService.accountListAdmin();
+        return new ResponseEntity<>(new ResponseDto<>(1, "전체 계좌 목록 보기_관리자 성공", accountListAdminRespDto),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping("/s/accounts/{number}")
     public ResponseEntity<?> deleteAccount(@PathVariable Long number,
                                            @AuthenticationPrincipal LoginUser loginUser) {

@@ -4,12 +4,9 @@ import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
-import com.griotold.bankshop.dto.account.AccountReqDto;
-import com.griotold.bankshop.dto.account.AccountRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +47,11 @@ public class AccountService {
                 -> new CustomApiException("유저를 찾을 수 없습니다."));
         List<Account> accountListPS = accountRepository.findByUser_id(userId);
         return new AccountListRespDto(userPS, accountListPS);
+    }
+
+    public AccountListAdminRespDto accountListAdmin() {
+        List<Account> all = accountRepository.findAll();
+        return new AccountListAdminRespDto(all);
     }
 
     @Transactional

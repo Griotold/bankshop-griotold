@@ -10,6 +10,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AccountRespDto {
+    @Getter
+    @Setter
+    public static class AccountListAdminRespDto {
+        private List<AccountDto> accountDtos = new ArrayList<>();
+
+        public AccountListAdminRespDto(List<Account> accounts) {
+            this.accountDtos = accounts.stream()
+                    .map(AccountDto::new).collect(Collectors.toList());
+        }
+
+        @Getter
+        @Setter
+        public static class AccountDto {
+            private Long accountId;
+            private Long userId;
+            private Long number;
+            private Long balance;
+
+            public AccountDto(Account account) {
+                this.accountId = account.getId();
+                this.userId = account.getUser().getId();
+                this.number = account.getNumber();
+                this.balance = account.getBalance();
+            }
+        }
+    }
 
     @Getter
     @Setter
