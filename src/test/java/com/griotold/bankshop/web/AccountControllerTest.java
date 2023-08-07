@@ -6,6 +6,7 @@ import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
+import com.griotold.bankshop.dto.account.AccountReqDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.griotold.bankshop.dto.account.AccountReqDto.*;
 import static com.griotold.bankshop.dto.account.AccountReqDto.AccountSaveReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -164,5 +166,81 @@ class AccountControllerTest extends DummyObject {
         resultActions.andExpect(status().isBadRequest());
         resultActions.andExpect(jsonPath("$.msg").value("계좌를 찾을 수 없습니다."));
 
+    }
+    @Test
+    @DisplayName("계좌 입금 컨트롤러 테스트")
+    void deposit_test() throws Exception {
+        // given
+        AccountDepositReqDto accountDepositReqDto = new AccountDepositReqDto();
+        accountDepositReqDto.setNumber(1111L);
+        accountDepositReqDto.setAmount(100L);
+        accountDepositReqDto.setTransactionType("DEPOSIT");
+        accountDepositReqDto.setTel("01034567890");
+
+        String requestBody = om.writeValueAsString(accountDepositReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/accounts/deposit")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 입금 완료"));
+    }
+    @Test
+    @DisplayName("계좌 입금 실패 - 0원")
+    void deposit_no_money_test() throws Exception {
+        // given
+        AccountDepositReqDto accountDepositReqDto = new AccountDepositReqDto();
+        accountDepositReqDto.setNumber(1111L);
+        accountDepositReqDto.setAmount(0L);
+        accountDepositReqDto.setTransactionType("DEPOSIT");
+        accountDepositReqDto.setTel("01034567890");
+
+        String requestBody = om.writeValueAsString(accountDepositReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/accounts/deposit")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("0원 이하의 금액을 입금할 수 없습니다."));
+    }
+
+    @Test
+    @DisplayName("계좌 입금 실패 - 없는 계좌 번호")
+    void deposit_no_account_test() throws Exception{
+        // given
+        AccountDepositReqDto accountDepositReqDto = new AccountDepositReqDto();
+        accountDepositReqDto.setNumber(5555L);
+        accountDepositReqDto.setAmount(100L);
+        accountDepositReqDto.setTransactionType("DEPOSIT");
+        accountDepositReqDto.setTel("01034567890");
+
+        String requestBody = om.writeValueAsString(accountDepositReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/accounts/deposit")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌를 찾을 수 없습니다."));
     }
 }
