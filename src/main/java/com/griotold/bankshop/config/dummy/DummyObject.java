@@ -1,5 +1,6 @@
 package com.griotold.bankshop.config.dummy;
 
+import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemSellStatus;
 import com.griotold.bankshop.domain.user.User;
@@ -62,6 +63,27 @@ public class DummyObject {
                 .stockNumber(100)
                 .itemDetail("테스트 아이템 설명")
                 .itemSellStatus(ItemSellStatus.SELL)
+                .build();
+    }
+
+    protected Account newAccount(Long number, User user) {
+        return Account.builder()
+                .number(number)
+                .password(1234L)
+                .balance(1000L)
+                .user(user)
+                .build();
+    }
+
+    protected Account newMockAccount(Long id, Long number, Long balance, User user) {
+        return Account.builder()
+                .id(id)
+                .number(number)
+                .password(1234L)
+                .balance(balance)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 }

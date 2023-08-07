@@ -6,6 +6,7 @@ import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static com.griotold.bankshop.dto.item.ItemReqDto.ItemRegisterReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@Slf4j
 @ActiveProfiles("test")
 @Transactional
 @AutoConfigureMockMvc
@@ -62,6 +63,7 @@ class ItemControllerTest extends DummyObject {
         itemRegisterReqDto.setItemDetail("재질이 극세사인 잘 닦이는 안경닦기");
         itemRegisterReqDto.setStockNumber(100);
         String requestBody = om.writeValueAsString(itemRegisterReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
 
         // when
         ResultActions resultActions = mvc.perform(post("/api/admin/items")
