@@ -3,6 +3,7 @@ package com.griotold.bankshop.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.griotold.bankshop.config.dummy.DummyObject;
 import com.griotold.bankshop.domain.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.griotold.bankshop.dto.user.UserReqDto.JoinReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+@Slf4j
 @ActiveProfiles("test")
-@Transactional
+@Sql("classpath:db/teardown.sql")
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class UserControllerTest extends DummyObject {
