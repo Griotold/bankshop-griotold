@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.griotold.bankshop.dto.account.AccountReqDto.AccountSaveReqDto;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -100,6 +100,7 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("유효성 검사 실패"));
     }
     @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
@@ -112,5 +113,55 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isOk());
+    }
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("deleteAccount() 테스트")
+    void deleteAccount_test() throws Exception {
+        // given
+        long number = 1111L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/s/accounts/" + number));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("다른 유저의 계좌를 삭제할 경우")
+    void deleteAccount_another_user() throws Exception {
+        // given
+        long number = 3333L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/s/accounts/" + number));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 소유자가 아닙니다."));
+
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("없는 계좌를 삭제할 경우")
+    void deleteAccount_no_account() throws Exception {
+        // given
+        long number = 5555L;
+
+        // when
+        ResultActions resultActions = mvc.perform(delete("/api/s/accounts/" + number));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌를 찾을 수 없습니다."));
+
     }
 }
