@@ -96,6 +96,36 @@ public class AccountService {
         return new AccountDepositRespDto(depositAccountPS, transactionPS);
     }
 
+    @Transactional
+    public AccountWithdrawRespDto withdraw(AccountWithdrawReqDto accountWithdrawReqDto,
+                                           Long userId) {
+        if (accountWithdrawReqDto.getAmount() <= 0L) {
+            throw new CustomApiException("0원 이하의 금액을 출금할 수 없습니다.");
+        }
 
+        Account withdrawAccountPS = accountRepository.findByNumber(accountWithdrawReqDto.getNumber())
+                .orElseThrow(() -> new CustomApiException("계좌를 찾을 수 없습니다."));
 
+        withdrawAccountPS.checkOwner(userId);
+
+        withdrawAccountPS.checkSamePassword(accountWithdrawReqDto.getPassword());
+
+        withdrawAccountPS.checkBalance(accountWithdrawReqDto.getAmount());
+
+        withdrawAccountPS.withdraw(accountWithdrawReqDto.getAmount());
+
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(withdrawAccountPS)
+                .depositAccount(null)
+                .withdrawAccountBalance(withdrawAccountPS.getBalance())
+                .depositAccountBalance(null)
+                .amount(accountWithdrawReqDto.getAmount())
+                .transactionType(TransactionType.WITHDRAW)
+                .sender(accountWithdrawReqDto.getNumber().toString())
+                .receiver("ATM")
+                .build();
+        Transaction transactionPS = transactionRepository.save(transaction);
+
+        return new AccountWithdrawRespDto(withdrawAccountPS, transactionPS);
+    }
 }

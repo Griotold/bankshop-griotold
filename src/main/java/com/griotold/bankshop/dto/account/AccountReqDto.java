@@ -4,10 +4,30 @@ import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 
 import javax.validation.constraints.*;
 
 public class AccountReqDto {
+
+    @Getter
+    @Setter
+    public static class AccountWithdrawReqDto {
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long number;
+
+        @NotNull
+        @Digits(integer = 4, fraction = 4)
+        private Long password;
+
+        @NotNull
+        private Long amount;
+
+        @NotEmpty
+        @Pattern(regexp = "WITHDRAW")
+        private String transactionType;
+    }
 
     @Getter
     @Setter

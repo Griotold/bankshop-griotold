@@ -65,4 +65,15 @@ public class AccountController {
         return new ResponseEntity<>(new ResponseDto<>(1, "계좌 입금 완료", accountDepositRespDto),
                 HttpStatus.CREATED);
     }
+
+    @PostMapping("/s/accounts/withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody @Valid AccountWithdrawReqDto accountWithdrawReqDto,
+                                      BindingResult bindingResult,
+                                      @AuthenticationPrincipal LoginUser loginUser) {
+        AccountWithdrawRespDto accountWithdrawRespDto
+                = accountService.withdraw(accountWithdrawReqDto, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 출금 완료", accountWithdrawRespDto),
+                HttpStatus.CREATED);
+
+    }
 }

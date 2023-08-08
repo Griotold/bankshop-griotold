@@ -55,12 +55,29 @@ public class Account {
     }
 
     public void checkOwner(Long userId) {
-        if (user.getId() != userId) {
+        if (user.getId().longValue() != userId.longValue()) {
             throw new CustomApiException("계좌 소유자가 아닙니다.");
         }
     }
 
     public void deposit(Long amount) {
         balance += amount;
+    }
+
+    public void checkSamePassword(Long password) {
+        if (this.password.longValue() != password.longValue()) {
+            throw new CustomApiException("계좌 비밀번호 검증에 실패했습니다.");
+        }
+    }
+
+    public void checkBalance(Long amount) {
+        if (this.balance < amount) {
+            throw new CustomApiException("계좌 잔액이 부족합니다.");
+        }
+    }
+
+    public void withdraw(Long amount) {
+        checkBalance(amount);
+        this.balance -= amount;
     }
 }

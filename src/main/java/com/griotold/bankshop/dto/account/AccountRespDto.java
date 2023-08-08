@@ -16,6 +16,42 @@ public class AccountRespDto {
 
     @Getter
     @Setter
+    public static class AccountWithdrawRespDto {
+        private Long id;
+        private Long number;
+        private Long balance;
+        private TransactionDto transactionDto;
+
+        public AccountWithdrawRespDto(Account account, Transaction transaction) {
+            this.id = account.getId();
+            this.number = account.getNumber();
+            this.balance = account.getBalance();
+            this.transactionDto = new TransactionDto(transaction);
+        }
+
+        @Getter
+        @Setter
+        public static class TransactionDto {
+            private Long id;
+            private String transactionType;
+            private String sender;
+            private String receiver;
+            private Long amount;
+            private String createdAt;
+
+            public TransactionDto(Transaction transaction) {
+                this.id = transaction.getId();
+                this.transactionType = transaction.getTransactionType().getValue();
+                this.sender = transaction.getSender();
+                this.receiver = transaction.getReceiver();
+                this.amount = transaction.getAmount();
+                this.createdAt = CustomDateUtil.toStringFormat(transaction.getCreatedAt());
+            }
+        }
+    }
+
+    @Getter
+    @Setter
     public static class AccountDepositRespDto {
         private Long id;
         private Long number;
