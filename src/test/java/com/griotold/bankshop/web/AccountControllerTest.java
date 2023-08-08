@@ -6,7 +6,6 @@ import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
-import com.griotold.bankshop.dto.account.AccountReqDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +20,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.griotold.bankshop.dto.account.AccountReqDto.*;
-import static com.griotold.bankshop.dto.account.AccountReqDto.AccountSaveReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,10 +58,11 @@ class AccountControllerTest extends DummyObject {
         Account rienAccount = accountRepository.save(newAccount(4444L, rien));
 
     }
+
     @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     @DisplayName("registerAccount() 테스트")
-    void registerAccount_test() throws Exception{
+    void registerAccount_test() throws Exception {
         // given
         AccountSaveReqDto accountSaveReqDto = new AccountSaveReqDto();
         accountSaveReqDto.setNumber(9999L);
@@ -105,6 +103,7 @@ class AccountControllerTest extends DummyObject {
         resultActions.andExpect(status().isBadRequest());
         resultActions.andExpect(jsonPath("$.msg").value("유효성 검사 실패"));
     }
+
     @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     @DisplayName("유저별 계좌 목록 조회")
@@ -117,6 +116,7 @@ class AccountControllerTest extends DummyObject {
         // then
         resultActions.andExpect(status().isOk());
     }
+
     @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     @DisplayName("deleteAccount() 테스트")
@@ -132,6 +132,7 @@ class AccountControllerTest extends DummyObject {
         // then
         resultActions.andExpect(status().isOk());
     }
+
     @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @Test
     @DisplayName("다른 유저의 계좌를 삭제할 경우")
@@ -145,7 +146,7 @@ class AccountControllerTest extends DummyObject {
         log.debug("테스트 : responseBody = {}", responseBody);
 
         // then
-        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(status().isForbidden());
         resultActions.andExpect(jsonPath("$.msg").value("계좌 소유자가 아닙니다."));
 
     }
@@ -167,6 +168,7 @@ class AccountControllerTest extends DummyObject {
         resultActions.andExpect(jsonPath("$.msg").value("계좌를 찾을 수 없습니다."));
 
     }
+
     @Test
     @DisplayName("계좌 입금 컨트롤러 테스트")
     void deposit_test() throws Exception {
@@ -192,6 +194,7 @@ class AccountControllerTest extends DummyObject {
         resultActions.andExpect(status().isCreated());
         resultActions.andExpect(jsonPath("$.msg").value("계좌 입금 완료"));
     }
+
     @Test
     @DisplayName("계좌 입금 실패 - 0원")
     void deposit_no_money_test() throws Exception {
@@ -220,7 +223,7 @@ class AccountControllerTest extends DummyObject {
 
     @Test
     @DisplayName("계좌 입금 실패 - 없는 계좌 번호")
-    void deposit_no_account_test() throws Exception{
+    void deposit_no_account_test() throws Exception {
         // given
         AccountDepositReqDto accountDepositReqDto = new AccountDepositReqDto();
         accountDepositReqDto.setNumber(5555L);
@@ -242,5 +245,142 @@ class AccountControllerTest extends DummyObject {
         // then
         resultActions.andExpect(status().isBadRequest());
         resultActions.andExpect(jsonPath("$.msg").value("계좌를 찾을 수 없습니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("계좌 출금 컨트롤러 테스트")
+    void withdraw_test() throws Exception {
+        // given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(1234L);
+        accountWithdrawReqDto.setAmount(100L);
+        accountWithdrawReqDto.setTransactionType("WITHDRAW");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/withdraw")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 출금 완료"));
+        resultActions.andExpect(jsonPath("$.data.balance").value(900L));
+    }
+
+    @WithUserDetails(value = "kandela", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("다른 사람이 계좌 출금 시도")
+    void withdraw_another_user_test() throws Exception {
+        // given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(1234L);
+        accountWithdrawReqDto.setAmount(100L);
+        accountWithdrawReqDto.setTransactionType("WITHDRAW");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/withdraw")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 소유자가 아닙니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("0원 출금 시도")
+    void withdraw_no_money_test() throws Exception {
+        // given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(1234L);
+        accountWithdrawReqDto.setAmount(0L);
+        accountWithdrawReqDto.setTransactionType("WITHDRAW");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/withdraw")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("0원 이하의 금액을 출금할 수 없습니다."));
+
+    }
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("계좌 패스워드가 다른 걸 넣었을 때")
+    void withdraw_password_test() throws Exception {
+        // given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(4444L);
+        accountWithdrawReqDto.setAmount(100L);
+        accountWithdrawReqDto.setTransactionType("WITHDRAW");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/withdraw")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 비밀번호 검증에 실패했습니다."));
+
+    }
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("거래 타입에 이상한 값을 넣었을 때")
+    void withdraw_invalid_transactionType_test() throws Exception {
+        // given
+        AccountWithdrawReqDto accountWithdrawReqDto = new AccountWithdrawReqDto();
+        accountWithdrawReqDto.setNumber(1111L);
+        accountWithdrawReqDto.setPassword(1234L);
+        accountWithdrawReqDto.setAmount(100L);
+        accountWithdrawReqDto.setTransactionType("BLAHBLAH");
+
+        String requestBody = om.writeValueAsString(accountWithdrawReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/withdraw")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+//        resultActions.andExpect(status().isBadRequest());
+//        resultActions.andExpect(jsonPath("$.msg").value("계좌 비밀번호 검증에 실패했습니다."));
+
     }
 }

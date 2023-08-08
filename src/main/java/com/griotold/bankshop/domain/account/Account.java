@@ -2,6 +2,7 @@ package com.griotold.bankshop.domain.account;
 
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.handler.ex.CustomApiException;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,7 +57,7 @@ public class Account {
 
     public void checkOwner(Long userId) {
         if (user.getId().longValue() != userId.longValue()) {
-            throw new CustomApiException("계좌 소유자가 아닙니다.");
+            throw new CustomForbiddenException("계좌 소유자가 아닙니다.");
         }
     }
 

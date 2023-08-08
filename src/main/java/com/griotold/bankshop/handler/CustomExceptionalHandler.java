@@ -2,6 +2,7 @@ package com.griotold.bankshop.handler;
 
 import com.griotold.bankshop.dto.ResponseDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import com.griotold.bankshop.handler.ex.CustomValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,16 @@ import java.util.concurrent.CancellationException;
 @Slf4j
 public class CustomExceptionalHandler {
 
+    @ExceptionHandler(CustomForbiddenException.class)
+    public ResponseEntity<?> forbiddenException(CustomForbiddenException e) {
+        log.error("CustomForbiddenException = {}", e.getMessage());
+        return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage(), null),
+                HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(CustomApiException.class)
     public ResponseEntity<?> apiException(CustomApiException e) {
-        log.error(e.getMessage());
+        log.error("CustomApiException = {}", e.getMessage());
         return new ResponseEntity<>(
                 new ResponseDto<>(-1, e.getMessage(), null),
                 HttpStatus.BAD_REQUEST);
@@ -25,7 +33,7 @@ public class CustomExceptionalHandler {
 
     @ExceptionHandler(CustomValidationException.class)
     public ResponseEntity<?> validationApiException(CustomValidationException e) {
-        log.error(e.getMessage());
+        log.error("CustomValidationException = {}", e.getMessage());
         return new ResponseEntity<>(
                 new ResponseDto<>(-1, e.getMessage(), e.getErrorMap()),
                         HttpStatus.BAD_REQUEST);
