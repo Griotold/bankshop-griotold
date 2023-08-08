@@ -379,8 +379,175 @@ class AccountControllerTest extends DummyObject {
         log.debug("테스트 : responseBody = {}", responseBody);
 
         // then
-//        resultActions.andExpect(status().isBadRequest());
-//        resultActions.andExpect(jsonPath("$.msg").value("계좌 비밀번호 검증에 실패했습니다."));
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("유효성 검사 실패"));
+
+    }
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("계좌 이체 성공 테스트")
+    void transfer_success_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(3333L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setTransactionType("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isCreated());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 이체 완료"));
+    }
+    @WithUserDetails(value = "kandela", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("다른 사람이 계좌 이체할 때")
+    void transfer_another_user_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(3333L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setTransactionType("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 소유자가 아닙니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("출금 계좌와 입금 계좌가 같을 때")
+    void transfer_withdraw_deposit_same_number_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(1111L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setTransactionType("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("입출금 계좌가 동일할 수 없습니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("계좌 패스워드 검증")
+    void transfer_invalid_password_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(3333L);
+        accountTransferReqDto.setWithdrawPassword(9999L);
+        accountTransferReqDto.setAmount(100L);
+        accountTransferReqDto.setTransactionType("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 비밀번호 검증에 실패했습니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("0원을 이체하려 할 때")
+    void transfer_no_money_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(3333L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(0L);
+        accountTransferReqDto.setTransactionType("TRANSFER");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("0원 이하의 금액을 이체할 수 없습니다."));
+    }
+
+    @WithUserDetails(value = "griotold", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @Test
+    @DisplayName("거래 타입에 이상한 값을 넣으려 할 때")
+    void transfer_invalid_transactionType_test() throws Exception {
+        // given
+        AccountTransferReqDto accountTransferReqDto = new AccountTransferReqDto();
+        accountTransferReqDto.setWithdrawNumber(1111L);
+        accountTransferReqDto.setDepositNumber(3333L);
+        accountTransferReqDto.setWithdrawPassword(1234L);
+        accountTransferReqDto.setAmount(0L);
+        accountTransferReqDto.setTransactionType("BLAHBLAH");
+
+        String requestBody = om.writeValueAsString(accountTransferReqDto);
+        log.debug("테스트 : requestBody = {}", requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(post("/api/s/accounts/transfer")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        log.debug("테스트 : responseBody = {}", responseBody);
+
+        // then
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.msg").value("유효성 검사 실패"));
 
     }
 }

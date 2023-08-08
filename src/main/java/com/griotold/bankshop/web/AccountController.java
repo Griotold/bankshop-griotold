@@ -76,4 +76,14 @@ public class AccountController {
                 HttpStatus.CREATED);
 
     }
+
+    @PostMapping("/s/accounts/transfer")
+    public ResponseEntity<?> transfer(@RequestBody @Valid AccountTransferReqDto accountTransferReqDto,
+                                      BindingResult bindingResult,
+                                      @AuthenticationPrincipal LoginUser loginUser) {
+        AccountTransferRespDto accountTransferRespDto
+                = accountService.transfer(accountTransferReqDto, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 이체 완료", accountTransferRespDto),
+                HttpStatus.CREATED);
+    }
 }

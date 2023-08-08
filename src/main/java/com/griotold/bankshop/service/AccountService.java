@@ -128,4 +128,46 @@ public class AccountService {
 
         return new AccountWithdrawRespDto(withdrawAccountPS, transactionPS);
     }
+
+    @Transactional
+    public AccountTransferRespDto transfer(AccountTransferReqDto accountTransferReqDto,
+                                           Long userId) {
+        if (accountTransferReqDto.getWithdrawNumber().longValue() == accountTransferReqDto.getDepositNumber().longValue()) {
+            throw new CustomApiException("입출금 계좌가 동일할 수 없습니다.");
+        }
+
+        if (accountTransferReqDto.getAmount() <= 0L) {
+            throw new CustomApiException("0원 이하의 금액을 이체할 수 없습니다.");
+        }
+
+        Account withdrawAccountPS = accountRepository.findByNumber(accountTransferReqDto.getWithdrawNumber())
+                .orElseThrow(() -> new CustomApiException("출금 계좌를 찾을 수 없습니다."));
+
+        Account depositAccountPS = accountRepository.findByNumber(accountTransferReqDto.getDepositNumber())
+                .orElseThrow(() -> new CustomApiException("입금 계좌를 찾을 수 없습니다."));
+
+        withdrawAccountPS.checkOwner(userId);
+
+        withdrawAccountPS.checkSamePassword(accountTransferReqDto.getWithdrawPassword());
+
+        withdrawAccountPS.checkBalance(accountTransferReqDto.getAmount());
+
+        withdrawAccountPS.withdraw(accountTransferReqDto.getAmount());
+        depositAccountPS.deposit(accountTransferReqDto.getAmount());
+
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(withdrawAccountPS)
+                .depositAccount(depositAccountPS)
+                .withdrawAccountBalance(withdrawAccountPS.getBalance())
+                .depositAccountBalance(depositAccountPS.getBalance())
+                .amount(accountTransferReqDto.getAmount())
+                .transactionType(TransactionType.TRANSFER)
+                .sender(accountTransferReqDto.getWithdrawNumber().toString())
+                .receiver(accountTransferReqDto.getDepositNumber().toString())
+                .build();
+
+        Transaction transactionPS = transactionRepository.save(transaction);
+
+        return new AccountTransferRespDto(withdrawAccountPS, transactionPS);
+    }
 }
