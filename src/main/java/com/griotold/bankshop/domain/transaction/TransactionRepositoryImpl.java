@@ -22,7 +22,7 @@ public class TransactionRepositoryImpl implements Dao{
         query.leftJoin(transaction.depositAccount).fetchJoin();
 
         query.where(transactionTypeCheck(transactionType, accountId));
-        query.limit(3).offset(page * 3);
+        query.limit(5).offset(page * 5);
 
         return query.fetch();
     }
@@ -30,14 +30,13 @@ public class TransactionRepositoryImpl implements Dao{
     private BooleanExpression transactionTypeCheck(String transactionType, Long accountId) {
         QTransaction transaction = new QTransaction("transaction");
 
-        if (!StringUtils.hasText(transactionType)) {
-            return transaction.withdrawAccount.id.eq(accountId).or(transaction.depositAccount.id.eq(accountId));
-        } else if (TransactionType.valueOf(transactionType) == TransactionType.DEPOSIT) {
+        if (TransactionType.valueOf(transactionType) == TransactionType.DEPOSIT) {
             return transaction.depositAccount.id.eq(accountId);
         } else if (TransactionType.valueOf(transactionType) == TransactionType.WITHDRAW) {
             return transaction.withdrawAccount.id.eq(accountId);
         } else {
-            return null;
+            return transaction.withdrawAccount.id.eq(accountId).or(transaction.depositAccount.id.eq(accountId));
         }
+
     }
 }
