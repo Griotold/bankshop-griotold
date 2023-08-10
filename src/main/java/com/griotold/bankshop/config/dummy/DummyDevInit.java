@@ -22,6 +22,7 @@ public class DummyDevInit extends DummyObject{
              User admin = userRepository.save(newAdminUser("admin", "관리자"));
             User griotold = userRepository.save(newUser("griotold", "고리오영감"));
             User kandela = userRepository.save(newUser("kandela", "칸델라"));
+            User rien = userRepository.save(newUser("rien", "리앵"));
 
             itemRepository.save(newItem("츄르"));
             itemRepository.save(newItem("안경닦이"));
