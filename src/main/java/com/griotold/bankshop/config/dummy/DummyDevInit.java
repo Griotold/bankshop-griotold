@@ -3,6 +3,7 @@ package com.griotold.bankshop.config.dummy;
 import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.item.ItemRepository;
+import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -17,7 +18,8 @@ public class DummyDevInit extends DummyObject{
     @Bean
     CommandLineRunner init(UserRepository userRepository,
                            ItemRepository itemRepository,
-                           AccountRepository accountRepository) {
+                           AccountRepository accountRepository,
+                           TransactionRepository transactionRepository) {
         return (args) -> {
              User admin = userRepository.save(newAdminUser("admin", "관리자"));
             User griotold = userRepository.save(newUser("griotold", "고리오영감"));
@@ -29,8 +31,15 @@ public class DummyDevInit extends DummyObject{
             itemRepository.save(newItem("물티슈"));
 
             Account griotoldAccount1 = accountRepository.save(newAccount(1111L, griotold));
-            Account griotoldAccount2 = accountRepository.save(newAccount(2222L, griotold));
-            Account kandelaAccount = accountRepository.save(newAccount(3333L, kandela));
+            Account kandelaAccount1 = accountRepository.save(newAccount(2222L, kandela));
+            Account rienAccount1 = accountRepository.save(newAccount(3333L, rien));
+            Account griotoldAccount2 = accountRepository.save(newAccount(4444L, griotold));
+
+            transactionRepository.save(newWithdrawTransaction(griotoldAccount1, accountRepository));
+            transactionRepository.save(newDepositTransaction(kandelaAccount1, accountRepository));
+            transactionRepository.save(newTransferTransaction(griotoldAccount1, kandelaAccount1, accountRepository));
+            transactionRepository.save(newTransferTransaction(griotoldAccount1, rienAccount1, accountRepository));
+            transactionRepository.save(newTransferTransaction(kandelaAccount1, griotoldAccount1, accountRepository));
         };
     }
 
