@@ -1,6 +1,7 @@
 package com.griotold.bankshop.domain.transaction;
 
 import com.griotold.bankshop.domain.account.Account;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 import java.nio.channels.FileLock;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "transaction_tb")

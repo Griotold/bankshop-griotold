@@ -3,6 +3,7 @@ package com.griotold.bankshop.domain.account;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import com.griotold.bankshop.handler.ex.CustomForbiddenException;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "account_tb")
