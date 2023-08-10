@@ -7,6 +7,7 @@ import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.domain.transaction.TransactionType;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
+import com.griotold.bankshop.dto.transaction.TransactionRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static com.griotold.bankshop.dto.account.AccountReqDto.*;
 import static com.griotold.bankshop.dto.account.AccountRespDto.*;
+import static com.griotold.bankshop.dto.transaction.TransactionRespDto.*;
 
 @Slf4j
 @Transactional(readOnly = true)
@@ -170,4 +172,18 @@ public class AccountService {
 
         return new AccountTransferRespDto(withdrawAccountPS, transactionPS);
     }
+
+    public AccountDetailRespDto accountDetail(Long number, Long userId, Integer page) {
+        String transactionType = "ALL";
+
+        Account accountPS = accountRepository.findByNumber(number)
+                .orElseThrow(() -> new CustomApiException("계좌를 찾을 수 없습니다."));
+
+        accountPS.checkOwner(userId);
+
+        List<Transaction> transactionListPS
+                = transactionRepository.findTransactionList(accountPS.getId(), transactionType, page);
+        return new AccountDetailRespDto(accountPS, transactionListPS);
+    }
+
 }

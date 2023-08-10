@@ -4,6 +4,7 @@ import com.griotold.bankshop.config.auth.LoginUser;
 import com.griotold.bankshop.dto.ResponseDto;
 import com.griotold.bankshop.dto.account.AccountReqDto;
 import com.griotold.bankshop.dto.account.AccountRespDto;
+import com.griotold.bankshop.dto.transaction.TransactionRespDto;
 import com.griotold.bankshop.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 import static com.griotold.bankshop.dto.account.AccountReqDto.*;
 import static com.griotold.bankshop.dto.account.AccountRespDto.*;
+import static com.griotold.bankshop.dto.transaction.TransactionRespDto.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -85,5 +87,15 @@ public class AccountController {
                 = accountService.transfer(accountTransferReqDto, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "계좌 이체 완료", accountTransferRespDto),
                 HttpStatus.CREATED);
+    }
+
+    @GetMapping("/s/accounts/{number}")
+    public ResponseEntity<?> accountDetail(@PathVariable Long number,
+                                           @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                           @AuthenticationPrincipal LoginUser loginUser) {
+        AccountDetailRespDto accountDetailRespDto
+                = accountService.accountDetail(number, loginUser.getUser().getId(), page);
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세 보기 성공", accountDetailRespDto),
+                HttpStatus.OK);
     }
 }
