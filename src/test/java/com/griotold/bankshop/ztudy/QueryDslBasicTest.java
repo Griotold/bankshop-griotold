@@ -52,7 +52,7 @@ public class QueryDslBasicTest {
         assertThat(findMember.getUsername()).isEqualTo("member1");
     }
     @Test
-    @DisplayName("queryDsl 시장")
+    @DisplayName("queryDsl 시작")
     void start_queryDsl() {
         // given
         QMember m = new QMember("m");

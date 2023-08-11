@@ -4,9 +4,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static com.griotold.bankshop.domain.transaction.QTransaction.*;
 
 @RequiredArgsConstructor
 public class TransactionRepositoryImpl implements Dao{
@@ -15,7 +16,6 @@ public class TransactionRepositoryImpl implements Dao{
 
     @Override
     public List<Transaction> findTransactionList(Long accountId, String transactionType, Integer page) {
-        QTransaction transaction = new QTransaction("transaction");
         JPAQuery<Transaction> query = jpaQueryFactory.selectFrom(transaction);
 
         query.leftJoin(transaction.withdrawAccount).fetchJoin();
