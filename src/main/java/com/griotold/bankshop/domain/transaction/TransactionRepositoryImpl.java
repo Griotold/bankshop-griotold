@@ -12,11 +12,11 @@ import static com.griotold.bankshop.domain.transaction.QTransaction.*;
 @RequiredArgsConstructor
 public class TransactionRepositoryImpl implements Dao{
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public List<Transaction> findTransactionList(Long accountId, String transactionType, Integer page) {
-        JPAQuery<Transaction> query = jpaQueryFactory.selectFrom(transaction);
+        JPAQuery<Transaction> query = queryFactory.selectFrom(transaction);
 
         query.leftJoin(transaction.withdrawAccount).fetchJoin();
         query.leftJoin(transaction.depositAccount).fetchJoin();
@@ -28,7 +28,6 @@ public class TransactionRepositoryImpl implements Dao{
     }
 
     private BooleanExpression transactionTypeCheck(String transactionType, Long accountId) {
-        QTransaction transaction = new QTransaction("transaction");
 
         if (TransactionType.valueOf(transactionType) == TransactionType.DEPOSIT) {
             return transaction.depositAccount.id.eq(accountId);
@@ -37,6 +36,6 @@ public class TransactionRepositoryImpl implements Dao{
         } else {
             return transaction.withdrawAccount.id.eq(accountId).or(transaction.depositAccount.id.eq(accountId));
         }
-
     }
+
 }

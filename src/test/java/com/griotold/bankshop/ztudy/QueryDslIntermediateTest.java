@@ -1,10 +1,14 @@
 package com.griotold.bankshop.ztudy;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +21,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.griotold.bankshop.ztudy.QMember.member;
+import static org.assertj.core.api.Assertions.*;
+
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
@@ -169,5 +175,73 @@ public class QueryDslIntermediateTest {
 
         result.stream().forEach(System.out::println);
     }
+    @Test
+    @DisplayName("동적 쿼리 1 - BooleanBuilder")
+    void dynamic_query_BooleanBuilder() throws Exception {
+        // given
+        String usernameParam = "member1";
+        Integer ageParam = null;
 
+        // when
+        List<Member> result = searchMember1(usernameParam, ageParam);
+
+        // then
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMember1(String usernameCond, Integer ageCond) {
+
+        // BooleanBuilder에 초기값 세팅도 가능
+        // new BooleanBuilder(member.username.eq(usernameCond))
+        BooleanBuilder builder = new BooleanBuilder();
+        if (usernameCond != null) {
+            builder.and(member.username.eq(usernameCond));
+        }
+
+        if (ageCond != null) {
+            builder.and(member.age.eq(ageCond));
+        }
+
+        return queryFactory.selectFrom(member)
+                .where(builder)
+                .fetch();
+    }
+
+    @Test
+    @DisplayName("동적 쿼리 2 - 다중 where")
+    void dynamic_query_multiple_where() throws Exception {
+        // given
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+
+        // when
+        List<Member> result = searchMember2(usernameParam, ageParam);
+
+        // then
+        assertThat(result.size()).isEqualTo(1);
+
+    }
+
+    private List<Member> searchMember2(String usernameCond, Integer ageCond) {
+        return queryFactory
+                .selectFrom(member)
+                .where(allEq(usernameCond, ageCond)) // null이 들어가면 무시!
+                .fetch();
+    }
+
+    private BooleanExpression usernameEq(String usernameCond) {
+//        if (usernameCond == null) {
+//            return null;
+//        }
+//        return member.username.eq(usernameCond);
+        return usernameCond != null ? member.username.eq(usernameCond) : null;
+    }
+
+    private BooleanExpression ageEq(Integer ageCond) {
+        return ageCond != null ? member.age.eq(ageCond) : null;
+    }
+
+    private BooleanExpression allEq(String usernameCond, Integer ageCond) {
+        return usernameEq(usernameCond).and(ageEq(ageCond));
+    }
 }

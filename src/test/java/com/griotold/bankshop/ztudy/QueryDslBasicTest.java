@@ -335,8 +335,8 @@ public class QueryDslBasicTest {
         em.clear();
 
         // when
-        Member findMember = queryFactory.selectFrom(QMember.member)
-                .where(QMember.member.username.eq("member1"))
+        Member findMember = queryFactory.selectFrom(member)
+                .where(member.username.eq("member1"))
                 .fetchOne();
 
         boolean isLoaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
@@ -352,9 +352,9 @@ public class QueryDslBasicTest {
 
         // when
         Member findMember = queryFactory
-                .selectFrom(QMember.member)
+                .selectFrom(member)
                 .join(member.team, team).fetchJoin()
-                .where(QMember.member.username.eq("member1"))
+                .where(member.username.eq("member1"))
                 .fetchOne();
 
         boolean isLoaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
