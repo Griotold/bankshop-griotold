@@ -244,4 +244,89 @@ public class QueryDslIntermediateTest {
     private BooleanExpression allEq(String usernameCond, Integer ageCond) {
         return usernameEq(usernameCond).and(ageEq(ageCond));
     }
+
+    /**
+     * member1 = 10 -> 비회원
+     * member2 = 20 -> 비회원
+     * member3 = 30 -> member3
+     * member4 = 40 -> member4
+     * */
+    @Test
+    @DisplayName("벌크 연산 - 수정")
+    void bulk_update() throws Exception {
+        // when
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        // 벌크 연산 후 반드시 flush, clear
+        // 영속성 컨텍스트는 아직 반영이 안 되어 있기 때문에
+        // 벌크 연산은 DB에 직접 SQL이 날라간다. 영속성 컨텍스트를 안 거치고
+        // repeatable read
+        em.flush();
+        em.clear();
+
+        List<Member> members = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        members.stream().forEach(System.out::println);
+    }
+    @Test
+    @DisplayName("벌크 - 더하기")
+    void bulk_add() throws Exception {
+        // when
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        result.stream().forEach(System.out::println);
+    }
+    
+    @Test
+    @DisplayName("벌크 - 곱하기")
+    void bulk_multiply() throws Exception {
+        // when
+        long count = queryFactory
+                .update(member)
+                .set(member.age, member.age.multiply(2))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        result.stream().forEach(System.out::println);
+    }
+    @Test
+    @DisplayName("벌크 - 삭제")
+    void bulk_delete() throws Exception {
+        // when
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        result.stream().forEach(System.out::println);
+    }
 }
