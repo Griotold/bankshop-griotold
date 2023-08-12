@@ -440,7 +440,7 @@ public class QueryDslBasicTest {
         for (Tuple tuple : result) {
             System.out.println("tuple = " + tuple);
         }
-
         // then
     }
+
 }
