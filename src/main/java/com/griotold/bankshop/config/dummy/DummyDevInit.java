@@ -6,20 +6,29 @@ import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
+import com.griotold.bankshop.ztudy.Member;
+import com.griotold.bankshop.ztudy.MemberJpaRepository;
+import com.griotold.bankshop.ztudy.Team;
+import com.griotold.bankshop.ztudy.TeamRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 @Configuration
 public class DummyDevInit extends DummyObject{
-
+    @Transactional // EntityManager 단독으로 쓰려고
     @Profile("dev")
     @Bean
     CommandLineRunner init(UserRepository userRepository,
                            ItemRepository itemRepository,
                            AccountRepository accountRepository,
-                           TransactionRepository transactionRepository) {
+                           TransactionRepository transactionRepository,
+                           MemberJpaRepository memberJpaRepository,
+                           TeamRepository teamRepository) {
         return (args) -> {
              User admin = userRepository.save(newAdminUser("admin", "관리자"));
             User griotold = userRepository.save(newUser("griotold", "고리오영감"));
@@ -40,6 +49,19 @@ public class DummyDevInit extends DummyObject{
             transactionRepository.save(newTransferTransaction(griotoldAccount1, kandelaAccount1, accountRepository));
             transactionRepository.save(newTransferTransaction(griotoldAccount1, rienAccount1, accountRepository));
             transactionRepository.save(newTransferTransaction(kandelaAccount1, griotoldAccount1, accountRepository));
+
+            /**
+             * QueryDSL용 더미 데이터
+             * */
+            Team teamA = new Team("teamA");
+            Team teamB = new Team("teamB");
+            teamRepository.save(teamA);
+            teamRepository.save(teamB);
+
+            for (int i = 0; i < 100; i++) {
+                Team selectedTeam = i % 2 == 0? teamA : teamB;
+                memberJpaRepository.save(new Member("member" + i, i, selectedTeam));
+            }
         };
     }
 
