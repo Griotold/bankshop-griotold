@@ -3,9 +3,9 @@ package com.griotold.bankshop.dto.transaction;
 import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.transaction.Transaction;
 import com.griotold.bankshop.utils.CustomDateUtil;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.dialect.CUBRIDDialect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class TransactionRespDto {
+
 
     @Getter
     @Setter

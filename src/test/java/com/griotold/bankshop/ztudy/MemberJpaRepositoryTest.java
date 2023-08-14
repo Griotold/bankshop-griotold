@@ -72,6 +72,7 @@ class MemberJpaRepositoryTest {
     @DisplayName("Repository 동적 쿼리 - builder 사용 ")
     void searchByBuilder_test() throws Exception {
         // given
+        setUp();
         MemberSearchCondition condition = new MemberSearchCondition();
         condition.setTeamName("teamB");
         condition.setAgeGoe(35);
@@ -89,6 +90,7 @@ class MemberJpaRepositoryTest {
     @DisplayName("builder - teamB만 조회")
     void condition_teamB() throws Exception {
         // given
+        setUp();
         MemberSearchCondition condition = new MemberSearchCondition();
         condition.setTeamName("teamB");
 
@@ -105,6 +107,7 @@ class MemberJpaRepositoryTest {
     @DisplayName("동적 쿼리 - 다중 where 사용")
     void multi_where() throws Exception {
         // given
+        setUp();
         MemberSearchCondition condition = new MemberSearchCondition();
         condition.setTeamName("teamB");
         condition.setAgeGoe(35);
@@ -119,7 +122,6 @@ class MemberJpaRepositoryTest {
                 .containsExactly("member4");
     }
 
-    @BeforeEach
     void setUp() {
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");

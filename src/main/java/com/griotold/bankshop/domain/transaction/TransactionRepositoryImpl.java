@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.griotold.bankshop.domain.transaction.QTransaction.*;
+import static com.griotold.bankshop.domain.transaction.QTransaction.transaction;
 
 @RequiredArgsConstructor
 public class TransactionRepositoryImpl implements Dao{
@@ -27,6 +27,8 @@ public class TransactionRepositoryImpl implements Dao{
         return query.fetch();
     }
 
+
+
     private BooleanExpression transactionTypeCheck(String transactionType, Long accountId) {
 
         if (TransactionType.valueOf(transactionType) == TransactionType.DEPOSIT) {
@@ -37,5 +39,6 @@ public class TransactionRepositoryImpl implements Dao{
             return transaction.withdrawAccount.id.eq(accountId).or(transaction.depositAccount.id.eq(accountId));
         }
     }
+
 
 }

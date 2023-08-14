@@ -5,9 +5,12 @@ import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.transaction.Transaction;
 import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.dto.transaction.TransactionRespDto;
+import com.griotold.bankshop.dto.transaction.TransactionSearchCondition;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,4 +35,6 @@ public class TransactionService {
         List<Transaction> transactionListPS = transactionRepository.findTransactionList(accountPS.getId(), transactionType, page);
         return new TransactionListRespDto(accountPS, transactionListPS);
     }
+
+
 }
