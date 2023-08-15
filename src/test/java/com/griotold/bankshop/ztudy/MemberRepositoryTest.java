@@ -5,6 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +68,112 @@ class MemberRepositoryTest {
         assertThat(memberTeamDtos)
                 .extracting("username")
                 .containsExactly("member4");
+    }
+    /**
+     * 스프링 데이터 JPA 페이징과 정렬
+     * */
+    @Test
+    @DisplayName("Page와 Pageable")
+    void page_pageable() throws Exception {
+        // given
+        Member member5 = new Member("member5", 10);
+        Member member6 = new Member("member6", 10);
+        Member member7 = new Member("member7", 10);
+        Member member8 = new Member("member8", 10);
+        em.persist(member5);
+        em.persist(member6);
+        em.persist(member7);
+        em.persist(member8);
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+
+        // when
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        // then
+        int totalPages = page.getTotalPages(); // 총 페이지수
+        List<Member> content = page.getContent(); // 가져온 레코드들
+        long totalCounts = page.getTotalElements(); // 총 데이터수
+        int pageNumber = page.getNumber(); // 현재 페이수 수 -> 첫 페이지 : 0
+        boolean first = page.isFirst(); // 첫 페이지냐
+        boolean last = page.isLast(); // 마지막 페이지냐
+        boolean hasNext = page.hasNext(); // 다음 페이지가 있냐
+
+        System.out.println("pageNumber = " + pageNumber);
+        System.out.println("totalPages = " + totalPages);
+        System.out.println("totalCounts = " + totalCounts);
+        content.stream().forEach(System.out::println);
+    }
+
+    /**
+     * Slice : 총 페이지수와 총 데이터수는 모른다
+     * limit 값 + 1 만큼 조회한다.
+     * */
+    @Test
+    @DisplayName("slice")
+    void slice() throws Exception {
+        // given
+        Member member5 = new Member("member5", 10);
+        Member member6 = new Member("member6", 10);
+        Member member7 = new Member("member7", 10);
+        Member member8 = new Member("member8", 10);
+        em.persist(member5);
+        em.persist(member6);
+        em.persist(member7);
+        em.persist(member8);
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+
+        // when
+        Slice<Member> page = memberRepository.findSliceByAge(age, pageRequest);
+
+        // then
+        // int totalPages = page.getTotalPages(); // 총 페이지수
+        // long totalCounts = page.getTotalElements(); // 총 데이터수
+        List<Member> content = page.getContent(); // 가져온 레코드들
+        int pageNumber = page.getNumber(); // 현재 페이수 수 -> 첫 페이지 : 0
+        boolean first = page.isFirst(); // 첫 페이지냐
+        boolean last = page.isLast(); // 마지막 페이지냐
+        boolean hasNext = page.hasNext(); // 다음 페이지가 있냐
+
+        System.out.println("pageNumber = " + pageNumber);
+        content.stream().forEach(System.out::println);
+        // System.out.println("totalPages = " + totalPages);
+        // System.out.println("totalCounts = " + totalCounts);
+    }
+    /**
+     * Page<Member>도 엔티티라 바로 리턴하지말고
+     * DTO로 변환해서 리턴!
+     * */
+    @Test
+    @DisplayName("page객체를 DTO로")
+    void page_to_dto() throws Exception {
+        // given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        em.persist(teamA);
+        em.persist(teamB);
+
+        Member member5 = new Member("member5", 10, teamA);
+        Member member6 = new Member("member6", 10, teamA);
+        Member member7 = new Member("member7", 10, teamB);
+        Member member8 = new Member("member8", 10, teamB);
+        em.persist(member5);
+        em.persist(member6);
+        em.persist(member7);
+        em.persist(member8);
+
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+
+        // when
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+        Page<MemberDto> toMap = page.map(member -> new MemberDto(member.getUsername(), member.getAge()));
+        toMap.stream().forEach(System.out::println);
+
+        // then
     }
 
 //    @BeforeEach

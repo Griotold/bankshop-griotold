@@ -72,18 +72,6 @@ public abstract class Querydsl4RepositorySupport {
     protected <T> JPAQuery<T> selectFrom(EntityPath<T> from) {
         return getQueryFactory().selectFrom(from);
     }
-     /*
-     deprecated!!!
-     //simple version : 카운트 쿼리 동시에
-    protected <T> Page<T> applyPagination(Pageable pageable,
-                                          Function<JPAQueryFactory, JPAQuery> contentQuery) {
-        JPAQuery jpaQuery = contentQuery.apply(getQueryFactory());
-        List<T> content = getQuerydsl().applyPagination(pageable,
-                jpaQuery).fetch();
-        return PageableExecutionUtils.getPage(content, pageable,
-                jpaQuery::fetchCount);
-    }
-    */
     /**
      * y2gcoder 의 QueryDSL 5버전
      * */
@@ -95,6 +83,18 @@ public abstract class Querydsl4RepositorySupport {
         JPAQuery<Long> countResult = countQuery.apply(getQueryFactory());
         return PageableExecutionUtils.getPage(content, pageable, countResult::fetchOne);
     }
+    /*
+     deprecated!!!
+     //simple version : 카운트 쿼리 동시에
+    protected <T> Page<T> applyPagination(Pageable pageable,
+                                          Function<JPAQueryFactory, JPAQuery> contentQuery) {
+        JPAQuery jpaQuery = contentQuery.apply(getQueryFactory());
+        List<T> content = getQuerydsl().applyPagination(pageable,
+                jpaQuery).fetch();
+        return PageableExecutionUtils.getPage(content, pageable,
+                jpaQuery::fetchCount);
+    }
+
     // complex version : 카운트 쿼리 분리
     protected <T> Page<T> applyPagination(Pageable pageable,
                                           Function<JPAQueryFactory, JPAQuery> contentQuery,
@@ -106,5 +106,5 @@ public abstract class Querydsl4RepositorySupport {
         JPAQuery<Long> countResult = countQuery.apply(getQueryFactory());
         return PageableExecutionUtils.getPage(content, pageable,
                 countResult::fetchCount);
-    }
+    }*/
 }
