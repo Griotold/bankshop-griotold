@@ -56,6 +56,10 @@ public class SecurityConfig {
 
         http.apply(new CustomSecurityFilterManager());
 
+        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
+            CustomResponseUtil.fail(response, "로그인을 해주세요", HttpStatus.UNAUTHORIZED);
+        });
+
         http.exceptionHandling().accessDeniedHandler((request, response, e) -> {
             CustomResponseUtil.fail(response, "권한이 없습니다.", HttpStatus.FORBIDDEN);
         });

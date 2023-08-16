@@ -1,7 +1,11 @@
 package com.griotold.bankshop.config.jwt;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.griotold.bankshop.config.auth.LoginUser;
+import com.griotold.bankshop.handler.ex.CustomJwtException;
+import com.griotold.bankshop.utils.CustomResponseUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,23 +26,28 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (isHeaderVerify(request)) {
-            log.debug("디버그 : 토큰이 존재함");
-            String token = request.getHeader(JwtVO.HEADER).replace(JwtVO.TOKEN_PREFIX, "");
-            LoginUser loginUser = JwtProcess.verify(token);
-            log.debug("디버그 : 토큰 검증 완료");
+        try {
+            if (isHeaderVerify(request)) {
+                log.debug("디버그 : 토큰이 존재함");
+                String token = request.getHeader(JwtVO.HEADER).replace(JwtVO.TOKEN_PREFIX, "");
+                LoginUser loginUser = JwtProcess.verify(token);
+                log.debug("디버그 : 토큰 검증 완료");
 
+                if (loginUser != null) {
+                    Authentication authentication
+                            = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.debug("디버그 : 임시 세션 생성");
+                }
 
-            Authentication authentication
-                    = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("디버그 : 임시 세션 생성");
-
+            }
+            chain.doFilter(request, response);
+        } catch (JWTVerificationException e) {
+            CustomResponseUtil.fail(response, "로그인을 다시 해주세요", HttpStatus.UNAUTHORIZED);
         }
-        chain.doFilter(request, response);
-    }
 
-    private boolean isHeaderVerify(HttpServletRequest request) {
+    }
+    private boolean isHeaderVerify (HttpServletRequest request){
         String header = request.getHeader(JwtVO.HEADER);
         if (header == null || !header.startsWith(JwtVO.TOKEN_PREFIX)) {
             return false;

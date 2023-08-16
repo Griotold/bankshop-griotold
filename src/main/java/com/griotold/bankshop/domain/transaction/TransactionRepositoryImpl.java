@@ -11,9 +11,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 
 import static com.griotold.bankshop.domain.transaction.QTransaction.transaction;
-import static com.griotold.bankshop.ztudy.QMember.member;
-import static com.griotold.bankshop.ztudy.QTeam.team;
-
 @RequiredArgsConstructor
 public class TransactionRepositoryImpl implements Dao{
 
@@ -32,15 +29,12 @@ public class TransactionRepositoryImpl implements Dao{
         List<Transaction> content = query.fetch();
 
         JPAQuery<Long> countQuery =
-                queryFactory
-                        .select(transaction.count())
+                queryFactory.select(transaction.count())
                         .from(transaction)
                         .where(transactionTypeCheck(transactionType, accountId));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
-
-
 
     private BooleanExpression transactionTypeCheck(String transactionType, Long accountId) {
 
@@ -52,6 +46,5 @@ public class TransactionRepositoryImpl implements Dao{
             return transaction.withdrawAccount.id.eq(accountId).or(transaction.depositAccount.id.eq(accountId));
         }
     }
-
 
 }
