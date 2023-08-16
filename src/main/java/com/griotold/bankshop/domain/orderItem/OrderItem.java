@@ -1,7 +1,7 @@
-package com.griotold.bankshop.domain.cartItem;
+package com.griotold.bankshop.domain.orderItem;
 
-import com.griotold.bankshop.domain.cart.Cart;
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.order.Order;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,23 +14,26 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
-@Table(name = "cart_item_tb")
-public class CartItem {
+@Table(name = "order_item_tb")
+@Entity
+public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_item_id")
+    @Column(name = "order_item_id")
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    private int orderPrice;
 
     private int count;
 
@@ -43,12 +46,13 @@ public class CartItem {
     private LocalDateTime updatedAt;
 
     @Builder
-
-    public CartItem(Long id, Cart cart, Item item, int count,
-                    LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public OrderItem(Long id, Item item, Order order,
+                     int orderPrice, int count,
+                     LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.cart = cart;
         this.item = item;
+        this.order = order;
+        this.orderPrice = orderPrice;
         this.count = count;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
