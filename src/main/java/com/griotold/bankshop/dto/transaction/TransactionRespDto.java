@@ -3,9 +3,10 @@ package com.griotold.bankshop.dto.transaction;
 import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.transaction.Transaction;
 import com.griotold.bankshop.utils.CustomDateUtil;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +23,14 @@ public class TransactionRespDto {
         private Long accountId;
         private Long number;
         private Long balance;
-        private List<TransactionDto> transactionDtos = new ArrayList<>();
+        private Page<TransactionDto> transactionDtos;
 
-        public AccountDetailRespDto(Account account, List<Transaction> transactions) {
+        public AccountDetailRespDto(Account account, Page<Transaction> transactions) {
             this.accountId = account.getId();
             this.number = account.getNumber();
             this.balance = account.getBalance();
-            this.transactionDtos = transactions.stream()
-                    .map((t) -> new TransactionDto(t, account.getNumber()))
-                    .collect(Collectors.toList());
+            this.transactionDtos = transactions
+                    .map((t) -> new TransactionDto(t, account.getNumber()));
         }
 
         @Getter
@@ -75,12 +75,11 @@ public class TransactionRespDto {
     @Setter
     public static class TransactionListRespDto {
 
-        private List<TransactionDto> transactionDtos = new ArrayList<>();
+        private Page<TransactionDto> transactionDtos;
 
-        public TransactionListRespDto(Account account, List<Transaction> transactions) {
-            this.transactionDtos = transactions.stream()
-                    .map((transaction) -> new TransactionDto(transaction, account.getNumber()))
-                    .collect(Collectors.toList());
+        public TransactionListRespDto(Account account, Page<Transaction> transactions) {
+            this.transactionDtos = transactions
+                    .map((transaction) -> new TransactionDto(transaction, account.getNumber()));
         }
 
 

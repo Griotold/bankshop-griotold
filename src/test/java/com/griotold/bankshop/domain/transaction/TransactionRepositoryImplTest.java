@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManager;
@@ -72,8 +74,10 @@ class TransactionRepositoryImplTest extends DummyObject {
         Long accountId = 1L;
         String transactionType = "ALL";
 
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
         // when
-        List<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, 0);
+        Page<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, pageRequest);
         all.stream().forEach((t) -> {
                 log.debug("테스트 : t.getId = {}", t.getId());
                 log.debug("테스트 : t.getAmount = {}", t.getAmount());
@@ -84,7 +88,7 @@ class TransactionRepositoryImplTest extends DummyObject {
                 log.debug("======================================");
         });
         // then
-        assertThat(all.size()).isEqualTo(4);
+        assertThat(all.getSize()).isEqualTo(4);
     }
     @Test
     @DisplayName("transactionType - WITHDRAW")
@@ -93,8 +97,11 @@ class TransactionRepositoryImplTest extends DummyObject {
         Long accountId = 1L;
         String transactionType = "WITHDRAW";
 
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+
         // when
-        List<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, 0);
+        Page<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, pageRequest);
         all.stream().forEach((t) -> {
             log.debug("테스트 : t.getId = {}", t.getId());
             log.debug("테스트 : t.getAmount = {}", t.getAmount());
@@ -105,7 +112,7 @@ class TransactionRepositoryImplTest extends DummyObject {
             log.debug("======================================");
         });
         // then
-        assertThat(all.size()).isEqualTo(3);
+        assertThat(all.getSize()).isEqualTo(3);
     }
     @Test
     @DisplayName("transactionType - DEPOSIT")
@@ -114,8 +121,10 @@ class TransactionRepositoryImplTest extends DummyObject {
         Long accountId = 1L;
         String transactionType = "DEPOSIT";
 
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
         // when
-        List<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, 0);
+        Page<Transaction> all = transactionRepository.findTransactionList(accountId, transactionType, pageRequest);
         all.stream().forEach((t) -> {
             log.debug("테스트 : t.getId = {}", t.getId());
             log.debug("테스트 : t.getAmount = {}", t.getAmount());
@@ -127,7 +136,7 @@ class TransactionRepositoryImplTest extends DummyObject {
         });
 
         // then
-        assertThat(all.size()).isEqualTo(1);
+        assertThat(all.getSize()).isEqualTo(1);
     }
 
 

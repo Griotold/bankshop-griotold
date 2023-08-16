@@ -26,14 +26,17 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     public TransactionListRespDto transactionList(Long userId, Long accountNumber,
-                                                  String transactionType, int page) {
+                                                  String transactionType,
+                                                  Pageable pageable) {
         Account accountPS = accountRepository.findByNumber(accountNumber)
                 .orElseThrow(() -> new CustomApiException("해당 계좌를 찾을 수 없습니다."));
 
         accountPS.checkOwner(userId);
 
-        List<Transaction> transactionListPS = transactionRepository.findTransactionList(accountPS.getId(), transactionType, page);
-        return new TransactionListRespDto(accountPS, transactionListPS);
+        Page<Transaction> transactionListPG =
+                transactionRepository
+                        .findTransactionList(accountPS.getId(), transactionType, pageable);
+        return new TransactionListRespDto(accountPS, transactionListPG);
     }
 
 

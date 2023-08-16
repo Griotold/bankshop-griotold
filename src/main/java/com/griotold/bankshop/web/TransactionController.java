@@ -9,6 +9,7 @@ import com.griotold.bankshop.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,11 +27,12 @@ public class TransactionController {
     @GetMapping("/s/accounts/{number}/transactions")
     public ResponseEntity<?> transactionList(@PathVariable Long number,
                                              @RequestParam(value = "transactionType", defaultValue = "ALL") String transactionType,
-                                             @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                             @PageableDefault(size = 5) Pageable pageable,
                                              @AuthenticationPrincipal LoginUser loginUser) {
-        TransactionListRespDto transactionListRespDto = transactionService.transactionList(loginUser.getUser().getId(), number, transactionType, page);
+        TransactionListRespDto transactionListRespDto
+                = transactionService.transactionList(loginUser.getUser().getId(), number, transactionType, pageable);
         return new ResponseEntity<>(new ResponseDto<>(1, "입출금 목록 보기 성공", transactionListRespDto),
-                HttpStatus.OK);
+                 HttpStatus.OK);
     }
 
 

@@ -8,6 +8,8 @@ import com.griotold.bankshop.dto.transaction.TransactionRespDto;
 import com.griotold.bankshop.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -91,11 +93,11 @@ public class AccountController {
 
     @GetMapping("/s/accounts/{number}")
     public ResponseEntity<?> accountDetail(@PathVariable Long number,
-                                           @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                           @PageableDefault(size = 5) Pageable pageable,
                                            @AuthenticationPrincipal LoginUser loginUser) {
         AccountDetailRespDto accountDetailRespDto
-                = accountService.accountDetail(number, loginUser.getUser().getId(), page);
-        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세 보기 성공", accountDetailRespDto),
+                = accountService.accountDetail(number, loginUser.getUser().getId(), pageable);
+        return new ResponseEntity<>(new ResponseDto<>(1, "계좌 상세보기 성공", accountDetailRespDto),
                 HttpStatus.OK);
     }
 }

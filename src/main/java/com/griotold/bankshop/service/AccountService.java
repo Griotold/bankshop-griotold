@@ -11,6 +11,8 @@ import com.griotold.bankshop.dto.transaction.TransactionRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -173,7 +175,7 @@ public class AccountService {
         return new AccountTransferRespDto(withdrawAccountPS, transactionPS);
     }
 
-    public AccountDetailRespDto accountDetail(Long number, Long userId, Integer page) {
+    public AccountDetailRespDto accountDetail(Long number, Long userId, Pageable pageable) {
         String transactionType = "ALL";
 
         Account accountPS = accountRepository.findByNumber(number)
@@ -181,9 +183,10 @@ public class AccountService {
 
         accountPS.checkOwner(userId);
 
-        List<Transaction> transactionListPS
-                = transactionRepository.findTransactionList(accountPS.getId(), transactionType, page);
-        return new AccountDetailRespDto(accountPS, transactionListPS);
+        Page<Transaction> transactionListPG =
+                transactionRepository
+                        .findTransactionList(accountPS.getId(), transactionType, pageable);
+        return new AccountDetailRespDto(accountPS, transactionListPG);
     }
 
 }

@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface Dao {
-    List<Transaction> findTransactionList(@Param("accountId") Long accountId,
+    Page<Transaction> findTransactionList(@Param("accountId") Long accountId,
                                           @Param("transactionType") String transactionType,
-                                          @Param("page") Integer page);
+                                          @Param("pageable") Pageable pageable);
 
 }
