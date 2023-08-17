@@ -4,6 +4,7 @@ import com.griotold.bankshop.config.dummy.DummyObject;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
+import com.griotold.bankshop.domain.orderItem.OrderItemRepository;
 import com.griotold.bankshop.domain.user.UserRepository;
 import com.griotold.bankshop.ztudy.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -31,6 +32,9 @@ class OrderTest extends DummyObject {
 
     @Autowired
     ItemRepository itemRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
 
 
     @Test
@@ -65,18 +69,7 @@ class OrderTest extends DummyObject {
     @DisplayName("DummyObject.newOrderItem 테스트")
     void newOrderItem_test() throws Exception {
         // given
-        Order order = new Order();
-
-        Item item1 = newItem("츄르");
-        Item item2 = newItem("물티슈");
-        Item item3 = newItem("안경닦이");
-        itemRepository.save(item1);
-        itemRepository.save(item2);
-        itemRepository.save(item3);
-
-        newOrderItem(item1, order);
-        newOrderItem(item2, order);
-        newOrderItem(item3, order);
+        Order order = createdOrder();
 
         orderRepository.saveAndFlush(order);
         em.clear();
@@ -121,6 +114,43 @@ class OrderTest extends DummyObject {
     @DisplayName("고아 객체 제거 - newOrderItem 활용")
     void orphan_newOrderItem_test() throws Exception {
         // given
+        Order order = createdOrder();
+        orderRepository.save(order);
+
+        // when
+        order.getOrderItems().remove(0);
+        em.flush();
+
+        Order findedOrder = orderRepository.findById(order.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        // then
+        assertThat(findedOrder.getOrderItems().size()).isEqualTo(2);
+
+    }
+    @Test
+    @DisplayName("지연로딩 테스트")
+    void lazy_test() throws Exception {
+        // given
+        Order order = createdOrder();
+        orderRepository.save(order);
+        Long orderItemId = order.getOrderItems().get(0).getId();
+
+        em.flush();
+        em.clear();
+
+        // when
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Order orderProxy = orderItem.getOrder();
+        System.out.println("orderProxy.getClass() = " + orderProxy.getClass());
+        System.out.println("===============");
+        orderProxy.getCreatedAt();
+        System.out.println("===============");
+        // then
+    }
+
+    Order createdOrder() {
         Order order = new Order();
 
         Item item1 = newItem("츄르");
@@ -133,17 +163,7 @@ class OrderTest extends DummyObject {
         newOrderItem(item1, order);
         newOrderItem(item2, order);
         newOrderItem(item3, order);
-        orderRepository.save(order);
-
-        // when
-        order.getOrderItems().remove(0);
-        em.flush();
-
-        Order findedOrder = orderRepository.findById(order.getId())
-                .orElseThrow(EntityNotFoundException::new);
-        // then
-        assertThat(findedOrder.getOrderItems().size()).isEqualTo(2);
-
+        return order;
     }
 
 }
