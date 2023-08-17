@@ -1,6 +1,7 @@
 package com.griotold.bankshop.dto.item;
 
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemImg;
 import com.griotold.bankshop.domain.item.ItemSellStatus;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,13 +67,16 @@ public class ItemRespDto {
         private int price;
         private int stockNumber;
         private String itemSellStatus;
+        private Long itemImgId;
 
-        public ItemRegisterRespDto(Item item) {
+        public ItemRegisterRespDto(Item item, ItemImg itemImg) {
             this.id = item.getId();
             this.itemName = item.getItemName();
             this.price = item.getPrice();
             this.stockNumber = item.getStockNumber();
             this.itemSellStatus = item.getItemSellStatus().toString();
+            this.itemImgId = itemImg.getId();
+
         }
     }
 }

@@ -3,6 +3,7 @@ package com.griotold.bankshop.config.dummy;
 import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemImg;
 import com.griotold.bankshop.domain.item.ItemSellStatus;
 import com.griotold.bankshop.domain.order.Order;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
@@ -80,6 +81,15 @@ public class DummyObject {
                 .stockNumber(100)
                 .itemDetail("테스트 아이템 설명")
                 .itemSellStatus(ItemSellStatus.SELL)
+                .build();
+    }
+
+    protected ItemImg newItemImg(String imgName, Item item) {
+        return ItemImg.builder()
+                .imgName(imgName)
+                .oriImgName("원본 이미지명")
+                .imgUrl("www.test.com")
+                .item(item)
                 .build();
     }
 

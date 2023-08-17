@@ -2,6 +2,8 @@ package com.griotold.bankshop.config.dummy;
 
 import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
+import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemImgRepository;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.domain.user.User;
@@ -28,16 +30,22 @@ public class DummyDevInit extends DummyObject{
                            AccountRepository accountRepository,
                            TransactionRepository transactionRepository,
                            MemberJpaRepository memberJpaRepository,
-                           TeamRepository teamRepository) {
+                           TeamRepository teamRepository,
+                           ItemImgRepository itemImgRepository) {
         return (args) -> {
              User admin = userRepository.save(newAdminUser("admin", "관리자"));
             User griotold = userRepository.save(newUser("griotold", "고리오영감"));
             User kandela = userRepository.save(newUser("kandela", "칸델라"));
             User rien = userRepository.save(newUser("rien", "리앵"));
 
-            itemRepository.save(newItem("츄르"));
-            itemRepository.save(newItem("안경닦이"));
-            itemRepository.save(newItem("물티슈"));
+            Item snack4Cat = itemRepository.save(newItem("츄르"));
+            Item sweeper = itemRepository.save(newItem("안경닦이"));
+            Item tissue = itemRepository.save(newItem("물티슈"));
+
+            itemImgRepository.save(newItemImg("츄르 이미지", snack4Cat));
+            itemImgRepository.save(newItemImg("안경닦이 이미지", sweeper));
+            itemImgRepository.save(newItemImg("물티슈 이미지", tissue));
+
 
             Account griotoldAccount1 = accountRepository.save(newAccount(1111L, griotold));
             Account kandelaAccount1 = accountRepository.save(newAccount(2222L, kandela));

@@ -1,6 +1,8 @@
 package com.griotold.bankshop.service;
 
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemImg;
+import com.griotold.bankshop.domain.item.ItemImgRepository;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.UserRepository;
 import com.griotold.bankshop.dto.item.ItemReqDto;
@@ -11,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.griotold.bankshop.dto.item.ItemReqDto.*;
+import static com.griotold.bankshop.dto.item.ItemReqDto.ItemRegisterReqDto.*;
 import static com.griotold.bankshop.dto.item.ItemRespDto.*;
 
 @Slf4j
@@ -23,8 +27,8 @@ import static com.griotold.bankshop.dto.item.ItemRespDto.*;
 @Service
 public class ItemService {
 
-    private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final ItemImgRepository itemImgRepository;
 
     @Transactional
     public ItemRegisterRespDto register(ItemRegisterReqDto itemRegisterReqDto) {
@@ -36,7 +40,15 @@ public class ItemService {
         Item item = itemRegisterReqDto.toEntity();
         Item itemPS = itemRepository.save(item);
 
-        return new ItemRegisterRespDto(itemPS);
+        ItemImg itemImg = ItemImg.builder()
+                .imgName(itemRegisterReqDto.getImgName())
+                .oriImgName(itemRegisterReqDto.getOriImgName())
+                .imgUrl(itemRegisterReqDto.getImgUrl())
+                .item(itemPS)
+                .build();
+
+        ItemImg itemImgPS = itemImgRepository.save(itemImg);
+        return new ItemRegisterRespDto(itemPS, itemImgPS);
     }
 
     public ItemListRespDto itemList() {
