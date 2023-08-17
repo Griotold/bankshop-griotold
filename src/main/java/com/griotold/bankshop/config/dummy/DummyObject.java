@@ -4,6 +4,8 @@ import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemSellStatus;
+import com.griotold.bankshop.domain.order.Order;
+import com.griotold.bankshop.domain.orderItem.OrderItem;
 import com.griotold.bankshop.domain.transaction.Transaction;
 import com.griotold.bankshop.domain.transaction.TransactionType;
 import com.griotold.bankshop.domain.user.User;
@@ -41,6 +43,7 @@ public class DummyObject {
                 .build();
     }
 
+
     protected User newMockUser(Long id, String username, String fullName) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode("1234");
@@ -56,6 +59,17 @@ public class DummyObject {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+    }
+    protected OrderItem newOrderItem(Item item, Order order) {
+        OrderItem orderItem = OrderItem.builder()
+                .item(item)
+                .count(10)
+                .orderPrice(1000)
+                .order(order)
+                .build();
+        order.getOrderItems().add(orderItem);
+        return orderItem;
+
     }
 
     protected Item newItem(String itemName) {

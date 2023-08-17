@@ -5,6 +5,7 @@ import com.griotold.bankshop.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Getter
+@Getter @Setter
 @Table(name = "order_tb")
 public class Order {
     @Id
@@ -32,7 +33,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
+                cascade = CascadeType.ALL,
+                orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @CreatedDate

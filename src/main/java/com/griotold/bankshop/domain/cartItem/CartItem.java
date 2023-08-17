@@ -2,10 +2,7 @@ package com.griotold.bankshop.domain.cartItem;
 
 import com.griotold.bankshop.domain.cart.Cart;
 import com.griotold.bankshop.domain.item.Item;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Getter
+@Getter @Setter
 @Table(name = "cart_item_tb")
 public class CartItem {
     @Id

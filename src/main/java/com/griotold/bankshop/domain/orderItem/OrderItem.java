@@ -2,10 +2,7 @@ package com.griotold.bankshop.domain.orderItem;
 
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.order.Order;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,9 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Getter
+@Getter @Setter
 @Table(name = "order_item_tb")
 @Entity
 public class OrderItem {
