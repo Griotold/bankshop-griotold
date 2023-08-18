@@ -72,27 +72,34 @@ public class ItemRespDto {
     @Getter
     @Setter
     public static class ItemListRespDto {
-        private List<ItemDto> itemDtos = new ArrayList<>();
+        private Page<ItemImgDto> itemDtos;
 
-        public ItemListRespDto(List<Item> items) {
-            this.itemDtos = items.stream().map((ItemDto::new)).collect(Collectors.toList());
+        public ItemListRespDto(Page<ItemImg> itemImgs) {
+            this.itemDtos = itemImgs
+                    .map((itemImg) -> new ItemImgDto(itemImg));
         }
 
         @Getter
         @Setter
-        public static class ItemDto {
+        public static class ItemImgDto {
             private Long id;
             private String itemName;
             private int price;
             private int stockNumber;
             private String itemSellStatus;
+            private String imgName;
+            private String oriImgName;
+            private String imgUrl;
 
-            public ItemDto(Item item) {
-                this.id = item.getId();
-                this.itemName = item.getItemName();
-                this.price = item.getPrice();
-                this.stockNumber = item.getStockNumber();
-                this.itemSellStatus = item.getItemSellStatus().name();
+            public ItemImgDto(ItemImg itemImg) {
+                this.id = itemImg.getItem().getId();
+                this.itemName = itemImg.getItem().getItemName();
+                this.price = itemImg.getItem().getPrice();
+                this.stockNumber = itemImg.getItem().getStockNumber();
+                this.itemSellStatus = itemImg.getItem().getItemSellStatus().name();
+                this.imgName = itemImg.getImgName();
+                this.oriImgName = itemImg.getOriImgName();
+                this.imgUrl = itemImg.getImgUrl();
             }
         }
     }

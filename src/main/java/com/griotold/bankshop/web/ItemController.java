@@ -43,8 +43,8 @@ public class ItemController {
     }
 
     @GetMapping("/items")
-    public ResponseEntity<?> retrieveItemList() {
-        ItemListRespDto itemListRespDto = itemService.itemList();
+    public ResponseEntity<?> retrieveItemList(@PageableDefault(size = 5) Pageable pageable) {
+        ItemListRespDto itemListRespDto = itemService.itemList4Customer(pageable);
         return new ResponseEntity<>(new ResponseDto<>(1, "상품 리스트", itemListRespDto),
                 HttpStatus.OK);
     }

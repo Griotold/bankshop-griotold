@@ -84,12 +84,11 @@ public class ItemService {
         return new ItemList4AdminDto(itemImgPage);
     }
 
-
-
-    public ItemListRespDto itemList() {
-        List<Item> itemListPS = itemRepository.findAll();
-        return new ItemListRespDto(itemListPS);
+    public ItemListRespDto itemList4Customer(Pageable pageable) {
+        Page<ItemImg> itemImgPage = itemImgQueryRepository.findAllPage("SELL", pageable);
+        return new ItemListRespDto(itemImgPage);
     }
+
 
     public ItemIdRespDto findOne(Long itemId){
         Item itemPS = itemRepository.findById(itemId).orElseThrow(
