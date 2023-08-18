@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotEmpty;
+
 import static com.griotold.bankshop.dto.item.ItemReqDto.ItemRegisterReqDto;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -63,6 +65,9 @@ class ItemControllerTest extends DummyObject {
         itemRegisterReqDto.setPrice(10000);
         itemRegisterReqDto.setItemDetail("재질이 극세사인 잘 닦이는 안경닦기");
         itemRegisterReqDto.setStockNumber(100);
+        itemRegisterReqDto.setImgName("극세사 안경 닦기 이미지네임");
+        itemRegisterReqDto.setOriImgName("원본 이미지네임");
+        itemRegisterReqDto.setImgUrl("www.eyeglasses.com");
         String requestBody = om.writeValueAsString(itemRegisterReqDto);
         log.debug("테스트 : requestBody = {}", requestBody);
 
