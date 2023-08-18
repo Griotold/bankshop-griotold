@@ -6,6 +6,7 @@ import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.el.stream.Stream;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.Digits;
@@ -16,6 +17,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemReqDto {
+
+    @Getter
+    @Setter
+    public static class ItemEditReqDto {
+        @NotNull(message = "상품 id는 필수 입력 값입니다.")
+        private Long itemId;
+
+        @Digits(integer = 6, fraction = 4, message = "100만 이하 숫자를 입력하세요.")
+        private Integer price;
+
+        @Digits(integer = 4, fraction = 4, message = "천 단위까지 입력 가능합니다.")
+        private Integer stockNumber;
+        private String itemDetail;
+
+        @Pattern(regexp = "^(SELL|SOLD_OUT)$", message = "SELL 또는 SOLD_OUT 중 하나만 입력하세요.")
+        private String itemSellStatus;
+        private String imgName;
+        private String oriImgName;
+        private String imgUrl;
+
+    }
 
 
     @Getter

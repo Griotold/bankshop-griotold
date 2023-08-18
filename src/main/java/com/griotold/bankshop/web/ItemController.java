@@ -45,6 +45,14 @@ public class ItemController {
         return new ResponseEntity<>(new ResponseDto<>(1, id + "번 상품", itemIdRespDto),
                 HttpStatus.OK);
     }
+    @PutMapping("/admin/items/{id}")
+    public ResponseEntity<?> updateItem(@PathVariable Long id,
+                                        @RequestBody @Valid ItemEditReqDto itemEditReqDto,
+                                        BindingResult bindingResult) {
+        ItemEditRespDto itemEditRespDto = itemService.editItem(itemEditReqDto, id);
+        return new ResponseEntity<>(new ResponseDto<>(1, "상품 수정 완료", itemEditRespDto),
+                HttpStatus.OK);
+    }
 
     @DeleteMapping("/admin/items/{id}")
     public ResponseEntity<?> deleteItem(@PathVariable Long id) {

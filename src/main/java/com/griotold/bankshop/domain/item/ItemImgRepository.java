@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
 
-    List<ItemImg> findByItem(Item item);
+    ItemImg findByItem(Item item);
 }

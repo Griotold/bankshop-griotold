@@ -1,9 +1,6 @@
 package com.griotold.bankshop.service;
 
-import com.griotold.bankshop.domain.item.Item;
-import com.griotold.bankshop.domain.item.ItemImg;
-import com.griotold.bankshop.domain.item.ItemImgRepository;
-import com.griotold.bankshop.domain.item.ItemRepository;
+import com.griotold.bankshop.domain.item.*;
 import com.griotold.bankshop.domain.user.UserRepository;
 import com.griotold.bankshop.dto.item.ItemReqDto;
 import com.griotold.bankshop.dto.item.ItemRespDto;
@@ -16,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CancellationException;
 
 import static com.griotold.bankshop.dto.item.ItemReqDto.*;
 import static com.griotold.bankshop.dto.item.ItemReqDto.ItemRegisterReqDto.*;
@@ -51,6 +49,33 @@ public class ItemService {
         return new ItemRegisterRespDto(itemPS, itemImgPS);
     }
 
+    @Transactional
+    public ItemEditRespDto editItem(ItemEditReqDto itemEditReqDto, Long itemId) {
+        if (itemEditReqDto.getItemId().longValue() != itemId.longValue()) {
+            throw new CustomApiException("URL 주소와 상품 id가 다릅니다.");
+        }
+
+        Item itemPS = itemRepository.findById(itemEditReqDto.getItemId())
+                .orElseThrow(() -> new CustomApiException("상품을 찾을 수 없습니다."));
+
+        ItemImg itemImgPS = itemImgRepository.findByItem(itemPS);
+
+        editEntity(itemEditReqDto, itemPS, itemImgPS);
+
+        return new ItemEditRespDto(itemPS, itemImgPS);
+    }
+
+    private void editEntity(ItemEditReqDto itemEditReqDto, Item itemPS, ItemImg itemImgPS) {
+        Optional.ofNullable(itemEditReqDto.getPrice()).ifPresent(itemPS::setPrice);
+        Optional.ofNullable(itemEditReqDto.getStockNumber()).ifPresent(itemPS::setStockNumber);
+        Optional.ofNullable(itemEditReqDto.getItemDetail()).ifPresent(itemPS::setItemDetail);
+        Optional.ofNullable(itemEditReqDto.getItemSellStatus())
+                .ifPresent(status -> itemPS.setItemSellStatus(ItemSellStatus.valueOf(status)));
+        Optional.ofNullable(itemEditReqDto.getImgName()).ifPresent(itemImgPS::setImgName);
+        Optional.ofNullable(itemEditReqDto.getOriImgName()).ifPresent(itemImgPS::setOriImgName);
+        Optional.ofNullable(itemEditReqDto.getImgUrl()).ifPresent(itemImgPS::setImgUrl);
+    }
+
     public ItemListRespDto itemList() {
         List<Item> itemListPS = itemRepository.findAll();
         return new ItemListRespDto(itemListPS);
@@ -69,9 +94,9 @@ public class ItemService {
         Item itemPS = itemRepository.findById(itemId).orElseThrow(
                 () -> new CustomApiException("상품을 찾을 수 없습니다."));
 
-        List<ItemImg> itemImgs = itemImgRepository.findByItem(itemPS);
-        if (itemImgs != null) {
-            itemImgs.forEach(itemImg -> itemImgRepository.delete(itemImg));
+        ItemImg itemImg = itemImgRepository.findByItem(itemPS);
+        if (itemImg != null) {
+            itemImgRepository.delete(itemImg);
         }
         itemRepository.deleteById(itemId);
     }

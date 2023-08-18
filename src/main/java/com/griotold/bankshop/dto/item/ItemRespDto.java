@@ -14,7 +14,6 @@ public class ItemRespDto {
 
     @Getter
     @Setter
-
     public static class ItemIdRespDto {
         private Long id;
         private String itemName;
@@ -76,6 +75,34 @@ public class ItemRespDto {
             this.stockNumber = item.getStockNumber();
             this.itemSellStatus = item.getItemSellStatus().toString();
             this.itemImgId = itemImg.getId();
+
+        }
+    }
+    @Getter
+    @Setter
+    public static class ItemEditRespDto {
+        private Long id;
+        private String itemName;
+        private int price;
+        private int stockNumber;
+        private String itemDetail;
+        private String itemSellStatus;
+        private Long itemImgId;
+        private String imgName;
+        private String oriImgName;
+        private String imgUrl;
+
+        public ItemEditRespDto(Item item, ItemImg itemImg) {
+            this.id = item.getId();
+            this.itemName = item.getItemName();
+            this.price = item.getPrice();
+            this.stockNumber = item.getStockNumber();
+            this.itemDetail = item.getItemDetail();
+            this.itemSellStatus = item.getItemSellStatus().toString();
+            this.itemImgId = itemImg.getId();
+            this.imgName = itemImg.getImgName();
+            this.oriImgName = itemImg.getOriImgName();
+            this.imgUrl = itemImg.getImgUrl();
 
         }
     }
