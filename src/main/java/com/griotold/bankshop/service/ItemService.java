@@ -68,6 +68,11 @@ public class ItemService {
     public void deleteItem(Long itemId) {
         Item itemPS = itemRepository.findById(itemId).orElseThrow(
                 () -> new CustomApiException("상품을 찾을 수 없습니다."));
+
+        List<ItemImg> itemImgs = itemImgRepository.findByItem(itemPS);
+        if (itemImgs != null) {
+            itemImgs.forEach(itemImg -> itemImgRepository.delete(itemImg));
+        }
         itemRepository.deleteById(itemId);
     }
 }
