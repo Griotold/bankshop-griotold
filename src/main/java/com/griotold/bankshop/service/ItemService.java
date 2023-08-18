@@ -65,15 +65,15 @@ public class ItemService {
         return new ItemEditRespDto(itemPS, itemImgPS);
     }
 
-    private void editEntity(ItemEditReqDto itemEditReqDto, Item itemPS, ItemImg itemImgPS) {
-        Optional.ofNullable(itemEditReqDto.getPrice()).ifPresent(itemPS::setPrice);
-        Optional.ofNullable(itemEditReqDto.getStockNumber()).ifPresent(itemPS::setStockNumber);
-        Optional.ofNullable(itemEditReqDto.getItemDetail()).ifPresent(itemPS::setItemDetail);
+    public void editEntity(ItemEditReqDto itemEditReqDto, Item item, ItemImg itemImg) {
+        Optional.ofNullable(itemEditReqDto.getPrice()).ifPresent(item::setPrice);
+        Optional.ofNullable(itemEditReqDto.getStockNumber()).ifPresent(item::setStockNumber);
+        Optional.ofNullable(itemEditReqDto.getItemDetail()).ifPresent(item::setItemDetail);
         Optional.ofNullable(itemEditReqDto.getItemSellStatus())
-                .ifPresent(status -> itemPS.setItemSellStatus(ItemSellStatus.valueOf(status)));
-        Optional.ofNullable(itemEditReqDto.getImgName()).ifPresent(itemImgPS::setImgName);
-        Optional.ofNullable(itemEditReqDto.getOriImgName()).ifPresent(itemImgPS::setOriImgName);
-        Optional.ofNullable(itemEditReqDto.getImgUrl()).ifPresent(itemImgPS::setImgUrl);
+                .ifPresent(status -> item.setItemSellStatus(ItemSellStatus.valueOf(status)));
+        Optional.ofNullable(itemEditReqDto.getImgName()).ifPresent(itemImg::setImgName);
+        Optional.ofNullable(itemEditReqDto.getOriImgName()).ifPresent(itemImg::setOriImgName);
+        Optional.ofNullable(itemEditReqDto.getImgUrl()).ifPresent(itemImg::setImgUrl);
     }
 
     public ItemListRespDto itemList() {
