@@ -5,6 +5,7 @@ import com.griotold.bankshop.domain.user.UserRepository;
 import com.griotold.bankshop.dto.item.ItemReqDto;
 import com.griotold.bankshop.dto.item.ItemRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -93,7 +94,22 @@ public class ItemService {
     public ItemIdRespDto findOne(Long itemId){
         Item itemPS = itemRepository.findById(itemId).orElseThrow(
                 () -> new CustomApiException("상품을 찾을 수 없습니다."));
-        return new ItemIdRespDto(itemPS);
+
+        if (itemPS.getItemSellStatus() == ItemSellStatus.SOLD_OUT) {
+            throw new CustomForbiddenException("권한이 없습니다.");
+        }
+        ItemImg itemImgPS = itemImgRepository.findByItem(itemPS);
+        return new ItemIdRespDto(itemImgPS);
+    }
+
+    public ItemIdRespDto findOne4Admin(Long itemId) {
+
+        Item itemPS = itemRepository.findById(itemId).orElseThrow(
+                () -> new CustomApiException("상품을 찾을 수 없습니다."));
+
+        ItemImg itemImgPS = itemImgRepository.findByItem(itemPS);
+        return new ItemIdRespDto(itemImgPS);
+
     }
 
 
@@ -109,4 +125,6 @@ public class ItemService {
         }
         itemRepository.deleteById(itemId);
     }
+
+
 }

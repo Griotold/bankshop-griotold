@@ -55,6 +55,13 @@ public class ItemController {
         return new ResponseEntity<>(new ResponseDto<>(1, id + "번 상품", itemIdRespDto),
                 HttpStatus.OK);
     }
+    @GetMapping("/admin/items/{id}")
+    public ResponseEntity<?> retrieveItem4Admin(@PathVariable Long id) {
+        ItemIdRespDto itemIdRespDto = itemService.findOne4Admin(id);
+        return new ResponseEntity<>(new ResponseDto<>(1, id + "번 상품", itemIdRespDto),
+                HttpStatus.OK);
+    }
+
     @PutMapping("/admin/items/{id}")
     public ResponseEntity<?> updateItem(@PathVariable Long id,
                                         @RequestBody @Valid ItemEditReqDto itemEditReqDto,

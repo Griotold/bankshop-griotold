@@ -59,13 +59,19 @@ public class ItemRespDto {
         private int price;
         private int stockNumber;
         private String itemSellStatus;
+        private String imgName;
+        private String oriImgName;
+        private String imgUrl;
 
-        public ItemIdRespDto(Item item) {
-            this.id = item.getId();
-            this.itemName = item.getItemName();
-            this.price = item.getPrice();
-            this.stockNumber = item.getStockNumber();
-            this.itemSellStatus = item.getItemSellStatus().name();
+        public ItemIdRespDto(ItemImg itemImg) {
+            this.id = itemImg.getItem().getId();
+            this.itemName = itemImg.getItem().getItemName();
+            this.price = itemImg.getItem().getPrice();
+            this.stockNumber = itemImg.getItem().getStockNumber();
+            this.itemSellStatus = itemImg.getItem().getItemSellStatus().name();
+            this.imgName = itemImg.getImgName();
+            this.oriImgName = itemImg.getOriImgName();
+            this.imgUrl = itemImg.getImgUrl();
         }
     }
 
