@@ -6,6 +6,8 @@ import com.griotold.bankshop.dto.item.ItemRespDto;
 import com.griotold.bankshop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -30,6 +32,14 @@ public class ItemController {
         ItemRegisterRespDto itemRegisterRespDto = itemService.register(itemRegisterReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "아이템 등록 성공", itemRegisterRespDto),
                 HttpStatus.CREATED);
+    }
+
+    @GetMapping("/admin/items")
+    public ResponseEntity<?> list4Admin(@RequestParam(value = "status", defaultValue = "ALL") String itemSellStatus,
+                                        @PageableDefault(size = 5) Pageable pageable){
+        ItemList4AdminDto itemList4AdminDto = itemService.itemList4Admin(itemSellStatus, pageable);
+        return new ResponseEntity<>(new ResponseDto<>(1, "관리자용 상품 목록", itemList4AdminDto),
+                HttpStatus.OK);
     }
 
     @GetMapping("/items")

@@ -1,16 +1,55 @@
 package com.griotold.bankshop.dto.item;
 
+import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemImg;
 import com.griotold.bankshop.domain.item.ItemSellStatus;
+import com.griotold.bankshop.domain.transaction.Transaction;
+import com.griotold.bankshop.dto.transaction.TransactionRespDto;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ItemRespDto {
+
+    @Getter
+    @Setter
+    public static class ItemList4AdminDto{
+        private Page<ItemImgDto> itemDtos;
+
+        public ItemList4AdminDto(Page<ItemImg> itemImgs) {
+            this.itemDtos = itemImgs
+                    .map((itemImg) -> new ItemImgDto(itemImg));
+        }
+
+        @Getter
+        @Setter
+        public static class ItemImgDto {
+            private Long id;
+            private String itemName;
+            private int price;
+            private int stockNumber;
+            private String itemSellStatus;
+            private String imgName;
+            private String oriImgName;
+            private String imgUrl;
+
+            public ItemImgDto(ItemImg itemImg) {
+                this.id = itemImg.getItem().getId();
+                this.itemName = itemImg.getItem().getItemName();
+                this.price = itemImg.getItem().getPrice();
+                this.stockNumber = itemImg.getItem().getStockNumber();
+                this.itemSellStatus = itemImg.getItem().getItemSellStatus().name();
+                this.imgName = itemImg.getImgName();
+                this.oriImgName = itemImg.getOriImgName();
+                this.imgUrl = itemImg.getImgUrl();
+            }
+        }
+    }
 
     @Getter
     @Setter

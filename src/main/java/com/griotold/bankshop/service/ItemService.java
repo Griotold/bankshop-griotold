@@ -7,6 +7,8 @@ import com.griotold.bankshop.dto.item.ItemRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemImgRepository itemImgRepository;
+    private final ItemImgQueryRepository itemImgQueryRepository;
 
     @Transactional
     public ItemRegisterRespDto register(ItemRegisterReqDto itemRegisterReqDto) {
@@ -75,6 +78,13 @@ public class ItemService {
         Optional.ofNullable(itemEditReqDto.getOriImgName()).ifPresent(itemImg::setOriImgName);
         Optional.ofNullable(itemEditReqDto.getImgUrl()).ifPresent(itemImg::setImgUrl);
     }
+
+    public ItemList4AdminDto itemList4Admin(String itemSellStatus, Pageable pageable) {
+        Page<ItemImg> itemImgPage = itemImgQueryRepository.findAllPage(itemSellStatus, pageable);
+        return new ItemList4AdminDto(itemImgPage);
+    }
+
+
 
     public ItemListRespDto itemList() {
         List<Item> itemListPS = itemRepository.findAll();
