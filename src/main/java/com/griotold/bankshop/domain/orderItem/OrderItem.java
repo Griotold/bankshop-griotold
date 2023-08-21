@@ -60,7 +60,7 @@ public class OrderItem {
                 .builder()
                 .item(item)
                 .count(count)
-                .orderPrice(item.getPrice() * count)
+                .orderPrice(item.getPrice())
                 .build();
 
         item.removeStock(count);

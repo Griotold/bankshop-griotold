@@ -37,13 +37,13 @@ public class OrderRespDto {
             private Long itemId;
             private String itemName;
             private int count;
-            private int orderPrice;
+            private int totalPrice;
 
             public OrderItemDto(OrderItem orderItem) {
                 this.itemId = orderItem.getItem().getId();
                 this.itemName = orderItem.getItem().getItemName();
                 this.count = orderItem.getCount();
-                this.orderPrice = orderItem.getOrderPrice();
+                this.totalPrice = orderItem.getTotalPrice();
             }
         }
     }

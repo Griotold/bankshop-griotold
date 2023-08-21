@@ -5,9 +5,7 @@ import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
 import com.griotold.bankshop.domain.orderItem.OrderItemRepository;
-import com.griotold.bankshop.domain.user.UserRepository;
-import com.griotold.bankshop.ztudy.MemberRepository;
-import org.assertj.core.api.Assertions;
+import com.griotold.bankshop.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Transactional
 @ActiveProfiles("test")
@@ -69,7 +70,7 @@ class OrderTest extends DummyObject {
     @DisplayName("DummyObject.newOrderItem 테스트")
     void newOrderItem_test() throws Exception {
         // given
-        Order order = createdOrder();
+        Order order = orderSetting();
 
         orderRepository.saveAndFlush(order);
         em.clear();
@@ -114,7 +115,7 @@ class OrderTest extends DummyObject {
     @DisplayName("고아 객체 제거 - newOrderItem 활용")
     void orphan_newOrderItem_test() throws Exception {
         // given
-        Order order = createdOrder();
+        Order order = orderSetting();
         orderRepository.save(order);
 
         // when
@@ -131,7 +132,7 @@ class OrderTest extends DummyObject {
     @DisplayName("지연로딩 테스트")
     void lazy_test() throws Exception {
         // given
-        Order order = createdOrder();
+        Order order = orderSetting();
         orderRepository.save(order);
         Long orderItemId = order.getOrderItems().get(0).getId();
 
@@ -149,8 +150,51 @@ class OrderTest extends DummyObject {
         System.out.println("===============");
         // then
     }
+    @Test
+    @DisplayName("createOrder() 테스트")
+    void createOrder_test() throws Exception {
+        // given
+        User user = newUser("griotold", "고리오영감");
+        Item item = newItem("book");
+        List<OrderItem> orderItemList = new ArrayList<>();
+        OrderItem orderItem = OrderItem.createOrderItem(item, 20);
+        orderItemList.add(orderItem);
 
-    Order createdOrder() {
+        // when
+        Order order = Order.createOrder(user, orderItemList);
+
+        // then
+        assertThat(order.getUser().getUsername()).isEqualTo("griotold");
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER);
+        assertThat(order.getOrderItems().size()).isEqualTo(1);
+        assertThat(order.getOrderItems().get(0).getTotalPrice()).isEqualTo(200000);
+        assertThat(orderItem.getOrder()).isEqualTo(order);
+    }
+
+    @Test
+    @DisplayName("getTotalPrice() 테스트")
+    void getTotalPrice_test() throws Exception {
+        // given
+        User user = newUser("griotold", "고리오영감");
+        Item book = newItem("book");
+        Item pencil = newItem("pencil");
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        OrderItem orderItemBook = OrderItem.createOrderItem(book, 20);
+        OrderItem orderItemPencil = OrderItem.createOrderItem(pencil, 30);
+        orderItemList.add(orderItemBook);
+        orderItemList.add(orderItemPencil);
+
+        Order order = Order.createOrder(user, orderItemList);
+
+        // when
+        int totalPrice = order.getTotalPrice().intValue();
+
+        // then
+        assertThat(totalPrice).isEqualTo(500000);
+    }
+
+    Order orderSetting() {
         Order order = new Order();
 
         Item item1 = newItem("츄르");
