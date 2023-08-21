@@ -1,10 +1,7 @@
 package com.griotold.bankshop.handler;
 
 import com.griotold.bankshop.dto.ResponseDto;
-import com.griotold.bankshop.handler.ex.CustomApiException;
-import com.griotold.bankshop.handler.ex.CustomForbiddenException;
-import com.griotold.bankshop.handler.ex.CustomJwtException;
-import com.griotold.bankshop.handler.ex.CustomValidationException;
+import com.griotold.bankshop.handler.ex.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +24,15 @@ public class CustomExceptionalHandler {
         return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage(), null),
                 HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(CustomOutOfStockException.class)
+    public ResponseEntity<?> outOfStockException(CustomOutOfStockException e) {
+        log.error("CustomOutOfStockException = {}", e.getMessage());
+        return new ResponseEntity<>(
+                new ResponseDto<>(-1, e.getMessage(), null),
+                HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(CustomApiException.class)
     public ResponseEntity<?> apiException(CustomApiException e) {

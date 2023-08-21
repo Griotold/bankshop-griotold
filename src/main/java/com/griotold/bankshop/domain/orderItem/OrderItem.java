@@ -54,4 +54,20 @@ public class OrderItem {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static OrderItem createOrderItem(Item item, int count) {
+        OrderItem orderItem = OrderItem
+                .builder()
+                .item(item)
+                .count(count)
+                .orderPrice(item.getPrice() * count)
+                .build();
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice() {
+        return orderPrice*count;
+    }
 }

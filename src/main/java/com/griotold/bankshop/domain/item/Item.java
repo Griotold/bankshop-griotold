@@ -1,5 +1,6 @@
 package com.griotold.bankshop.domain.item;
 
+import com.griotold.bankshop.handler.ex.CustomOutOfStockException;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -55,5 +56,13 @@ public class Item {
         this.itemSellStatus = itemSellStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public void removeStock(int stockNumber) {
+        int restStock = this.stockNumber - stockNumber;
+        if (restStock < 0) {
+            throw new CustomOutOfStockException("상품의 재고가 부족합니다. 현재 재고 수량: " + this.stockNumber);
+        }
+        this.stockNumber = restStock;
     }
 }
