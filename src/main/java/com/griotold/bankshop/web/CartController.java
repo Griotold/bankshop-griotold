@@ -7,14 +7,13 @@ import com.griotold.bankshop.dto.cart.CartRespDto;
 import com.griotold.bankshop.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,6 +35,13 @@ public class CartController {
         CartAddRespDto cartAddRespDto = cartService.addCart(cartItemDto, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 담기 성공", cartAddRespDto),
                 HttpStatus.CREATED);
+    }
+    @GetMapping("/s/cart/items")
+    public ResponseEntity<?> retrieveCartItems(@PageableDefault(size = 5)Pageable pageable,
+                                               @AuthenticationPrincipal LoginUser loginUser) {
+        CartDetailRespDto cartDetailRespDto = cartService.retrieveCartItem(loginUser.getUser().getId(), pageable);
+        return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 목록 보기", cartDetailRespDto),
+                HttpStatus.OK);
     }
 
 }

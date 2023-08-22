@@ -3,6 +3,7 @@ package com.griotold.bankshop.service;
 import com.griotold.bankshop.domain.cart.Cart;
 import com.griotold.bankshop.domain.cart.CartRepository;
 import com.griotold.bankshop.domain.cartItem.CartItem;
+import com.griotold.bankshop.domain.cartItem.CartItemQueryRepository;
 import com.griotold.bankshop.domain.cartItem.CartItemRepository;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
@@ -12,6 +13,8 @@ import com.griotold.bankshop.dto.cart.CartReqDto;
 import com.griotold.bankshop.dto.cart.CartRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,7 @@ public class CartService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final CartItemQueryRepository cartItemQueryRepository;
 
     @Transactional
     public CartAddRespDto addCart(CartItemDto cartItemDto, Long userId) {
@@ -54,5 +58,18 @@ public class CartService {
             cartItemRepository.save(cartItem);
             return new CartAddRespDto(itemPS, cartItem);
         }
+    }
+
+    public CartDetailRespDto retrieveCartItem(Long userId, Pageable pageable) {
+
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+//        Cart cart = cartRepository.findByUserId(userId);
+//        if (cart == null) {
+//            return
+//        }
+        Page<CartItem> cartItemPG = cartItemQueryRepository.findCartItem(pageable);
+        return new CartDetailRespDto(cartItemPG);
     }
 }
