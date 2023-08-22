@@ -50,4 +50,16 @@ public class CartItem {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static CartItem createCartItem(Cart cart, Item item, int count) {
+        return CartItem.builder()
+                .cart(cart)
+                .item(item)
+                .count(count)
+                .build();
+    }
+
+    public void addCount(int count) {
+        this.count += count;
+    }
 }

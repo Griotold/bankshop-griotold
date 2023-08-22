@@ -25,4 +25,10 @@ public class Cart {
         this.id = id;
         this.user = user;
     }
+
+    public static Cart createCart(User user){
+        return Cart.builder()
+                .user(user)
+                .build();
+    }
 }
