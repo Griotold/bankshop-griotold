@@ -2,6 +2,7 @@ package com.griotold.bankshop.domain.order;
 
 import com.griotold.bankshop.domain.orderItem.OrderItem;
 import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -77,5 +78,19 @@ public class Order {
         AtomicInteger totalPrice = new AtomicInteger(); // 멀티 스레드 환경 고려
         orderItems.forEach((orderItem) -> totalPrice.addAndGet(orderItem.getTotalPrice()));
         return totalPrice;
+    }
+
+    public void checkOwner(Long userId) {
+        if (user.getId().longValue() != userId.longValue()) {
+            throw new CustomForbiddenException("주문한 회원이 아닙니다.");
+        }
+    }
+
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
     }
 }

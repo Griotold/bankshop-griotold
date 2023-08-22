@@ -28,4 +28,11 @@ public class OrderReqDto {
         @Max(value = 999, message = "최대 주문 수량은 999개 입니다.")
         private Integer count;
     }
+    @Getter
+    @Setter
+    public static class OrderCancelReqDto {
+        @NotNull(message = "환불 계좌는 필수 입력 값입니다.")
+        @Digits(integer = 4, fraction = 4)
+        private Long accountNumber;
+    }
 }

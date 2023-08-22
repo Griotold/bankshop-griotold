@@ -2,9 +2,6 @@ package com.griotold.bankshop.web;
 
 import com.griotold.bankshop.config.auth.LoginUser;
 import com.griotold.bankshop.dto.ResponseDto;
-import com.griotold.bankshop.dto.account.AccountRespDto;
-import com.griotold.bankshop.dto.order.OrderReqDto;
-import com.griotold.bankshop.dto.order.OrderRespDto;
 import com.griotold.bankshop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.griotold.bankshop.dto.order.OrderReqDto.*;
-import static com.griotold.bankshop.dto.order.OrderRespDto.*;
+import static com.griotold.bankshop.dto.order.OrderReqDto.OrderCancelReqDto;
+import static com.griotold.bankshop.dto.order.OrderReqDto.OrderDto;
+import static com.griotold.bankshop.dto.order.OrderRespDto.OrderHistDto;
+import static com.griotold.bankshop.dto.order.OrderRespDto.OrderReturnDto;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,6 +35,16 @@ public class OrderController {
         OrderReturnDto orderReturnDto = orderService.order(orderDto, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "주문 완료", orderReturnDto),
                 HttpStatus.CREATED);
+    }
+
+    @PostMapping("/s/orders/{orderId}")
+    public ResponseEntity<?> cancel(@RequestBody @Valid OrderCancelReqDto orderCancelReqDto,
+                                    BindingResult bindingResult,
+                                    @PathVariable Long orderId,
+                                    @AuthenticationPrincipal LoginUser loginUser) {
+        orderService.orderCancel(orderCancelReqDto, orderId, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "주문 취소 완료", null),
+                HttpStatus.OK);
     }
 
     @GetMapping("/s/orders/login-user")

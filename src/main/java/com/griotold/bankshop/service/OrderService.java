@@ -72,7 +72,7 @@ public class OrderService {
                 .amount(amount)
                 .transactionType(TransactionType.TRANSFER)
                 .sender(accountPS.getNumber().toString())
-                .receiver("BANK")
+                .receiver("BANKSHOP")
                 .build();
         transactionRepository.save(transaction);
 
@@ -84,6 +84,40 @@ public class OrderService {
         Order orderPS = orderRepository.save(order);
 
         return new OrderReturnDto(accountPS, orderPS, orderItem);
+    }
+
+    @Transactional
+    public void orderCancel(OrderCancelReqDto orderCancelReqDto, Long orderId, Long userId){
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+        Account accountPS = accountRepository.findByNumber(orderCancelReqDto.getAccountNumber())
+                .orElseThrow(() -> new CustomApiException("계좌를 찾을 수 없습니다."));
+
+        Order orderPS = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomApiException("주문을 찾을 수 없습니다."));
+
+        long returnAmount = orderPS.getTotalPrice().longValue();
+
+        accountPS.checkOwner(userId);
+
+        orderPS.checkOwner(userId);
+
+        accountPS.deposit(returnAmount);
+
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(null)
+                .depositAccount(accountPS)
+                .withdrawAccountBalance(null)
+                .depositAccountBalance(accountPS.getBalance())
+                .amount(returnAmount)
+                .transactionType(TransactionType.TRANSFER)
+                .sender("BANKSHOP")
+                .receiver(accountPS.getNumber().toString())
+                .build();
+        transactionRepository.save(transaction);
+
+        orderPS.cancelOrder();
     }
 
     public OrderHistDto historyList(Long userId, String orderStatus,
