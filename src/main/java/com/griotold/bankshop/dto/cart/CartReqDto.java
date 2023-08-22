@@ -17,4 +17,15 @@ public class CartReqDto {
         @Min(value = 1, message = "최소 1개 이상 담아주세요.")
         private Integer count;
     }
+
+    @Getter
+    @Setter
+    public static class CartItemUpdateReqDto {
+        @NotNull(message = "장바구니 상품 id는 필수 입력값 입니다.")
+        private Long cartItemId;
+
+        @Min(value = 1, message = "최소 1개 이상 담아주세요.")
+        private Integer count;
+
+    }
 }

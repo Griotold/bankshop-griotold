@@ -65,11 +65,24 @@ public class CartService {
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
 
-//        Cart cart = cartRepository.findByUserId(userId);
-//        if (cart == null) {
-//            return
-//        }
         Page<CartItem> cartItemPG = cartItemQueryRepository.findCartItem(pageable);
         return new CartDetailRespDto(cartItemPG);
+    }
+    @Transactional
+    public CartItemUpdateRespDto updateCartItemCount(CartItemUpdateReqDto cartItemUpdateReqDto,
+                                                     Long userId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+        CartItem cartItemPS = cartItemRepository.findById(cartItemUpdateReqDto.getCartItemId())
+                .orElseThrow(() -> new CustomApiException("장바구니 상품을 찾을 수 없습니다."));
+
+        Cart cartPS = cartItemPS.getCart();
+
+        cartPS.checkOwner(userId);
+
+        cartItemPS.updateCount(cartItemUpdateReqDto.getCount());
+
+        return new CartItemUpdateRespDto(cartItemPS);
     }
 }

@@ -54,4 +54,20 @@ public class CartRespDto {
         }
 
     }
+
+    @Getter
+    @Setter
+    public static class CartItemUpdateRespDto {
+        private Long cartItemId;
+        private String itemName;
+        private int count;
+        private int orderPrice;
+
+        public CartItemUpdateRespDto(CartItem cartItem) {
+            this.cartItemId = cartItem.getId();
+            this.itemName = cartItem.getItem().getItemName();
+            this.count = cartItem.getCount();
+            this.orderPrice = cartItem.getCount() * cartItem.getItem().getPrice();
+        }
+    }
 }

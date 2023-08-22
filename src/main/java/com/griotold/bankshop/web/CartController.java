@@ -44,4 +44,16 @@ public class CartController {
                 HttpStatus.OK);
     }
 
+    @PutMapping("/s/cart/items/{cartItemId}")
+    public ResponseEntity<?> updateCartItemCount(@PathVariable Long cartItemId,
+                                                 @RequestBody @Valid CartItemUpdateReqDto cartItemUpdateReqDto,
+                                                 BindingResult bindingResult,
+                                                 @AuthenticationPrincipal LoginUser loginUser) {
+        CartItemUpdateRespDto cartItemUpdateRespDto
+                = cartService.updateCartItemCount(cartItemUpdateReqDto, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 상품 수량 업데이트 성공", cartItemUpdateRespDto),
+                HttpStatus.CREATED);
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.griotold.bankshop.domain.cart;
 
 import com.griotold.bankshop.domain.user.User;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -30,5 +31,11 @@ public class Cart {
         return Cart.builder()
                 .user(user)
                 .build();
+    }
+
+    public void checkOwner(Long userId){
+        if (user.getId().longValue() != userId.longValue()) {
+            throw new CustomForbiddenException("장바구니 소유자가 아닙니다.");
+        }
     }
 }
