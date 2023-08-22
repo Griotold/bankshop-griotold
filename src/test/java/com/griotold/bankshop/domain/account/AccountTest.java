@@ -3,6 +3,7 @@ package com.griotold.bankshop.domain.account;
 import com.griotold.bankshop.config.dummy.DummyObject;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.handler.ex.CustomApiException;
+import com.griotold.bankshop.handler.ex.CustomForbiddenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +30,7 @@ class AccountTest extends DummyObject {
 
         // when + then
         assertThatThrownBy(
-                () -> account.checkOwner(userId)).isInstanceOf(CustomApiException.class);
+                () -> account.checkOwner(userId)).isInstanceOf(CustomForbiddenException.class);
     }
 
     @Test

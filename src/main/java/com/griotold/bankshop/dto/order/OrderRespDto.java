@@ -1,5 +1,6 @@
 package com.griotold.bankshop.dto.order;
 
+import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.order.Order;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
 import com.griotold.bankshop.domain.user.User;
@@ -13,12 +14,16 @@ public class OrderRespDto {
     @Getter
     @Setter
     public static class OrderReturnDto {
+        private Long accountNumber;
+        private Long balance;
         private Long orderId;
         private String orderDate;
         private String orderStatus;
         private OrderItemDto orderItemDto;
 
-        public OrderReturnDto(Order order, OrderItem orderItem) {
+        public OrderReturnDto(Account account, Order order, OrderItem orderItem) {
+            this.accountNumber = account.getNumber();
+            this.balance = account.getBalance();
             this.orderId = order.getId();
             this.orderDate = CustomDateUtil.toStringFormat(order.getCreatedAt());
             this.orderStatus = order.getOrderStatus().getValue();
