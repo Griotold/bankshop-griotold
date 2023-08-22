@@ -5,16 +5,17 @@ import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.order.Order;
 import com.griotold.bankshop.domain.order.OrderRepository;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
-import com.griotold.bankshop.domain.orderItem.OrderItemRepository;
+import com.griotold.bankshop.domain.orderItem.OrderItemQueryRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
-import com.griotold.bankshop.dto.order.OrderReqDto;
-import com.griotold.bankshop.dto.order.OrderRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,10 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-//    private final OrderItemRepository orderItemRepository;
+    private final OrderItemQueryRepository orderItemQueryRepository;
 
     @Transactional
-    public OrderHistDto order(OrderDto orderDto, Long userId) {
+    public OrderReturnDto order(OrderDto orderDto, Long userId) {
         User userPS = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
 
@@ -43,12 +44,24 @@ public class OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
         OrderItem orderItem = OrderItem.createOrderItem(itemPS, orderDto.getCount());
-//        orderItemRepository.save(orderItem);
         orderItemList.add(orderItem);
 
         Order order = Order.createOrder(userPS, orderItemList);
         Order orderPS = orderRepository.save(order);
 
-        return new OrderHistDto(orderPS, orderItemList);
+        return new OrderReturnDto(orderPS, orderItem);
+    }
+
+    public OrderHistDto historyList(Long userId, String orderStatus,
+                                    Pageable pageable) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+        Page<OrderItem> orderItemPG
+                = orderItemQueryRepository.findOrderItem(orderStatus, pageable);
+
+        return new OrderHistDto(userPS, orderItemPG);
+
+
     }
 }
