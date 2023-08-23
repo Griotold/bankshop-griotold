@@ -2,6 +2,7 @@ package com.griotold.bankshop.web;
 
 import com.griotold.bankshop.config.auth.LoginUser;
 import com.griotold.bankshop.dto.ResponseDto;
+import com.griotold.bankshop.dto.order.OrderRespDto;
 import com.griotold.bankshop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 import static com.griotold.bankshop.dto.order.OrderReqDto.OrderCancelReqDto;
 import static com.griotold.bankshop.dto.order.OrderReqDto.OrderDto;
+import static com.griotold.bankshop.dto.order.OrderRespDto.*;
 import static com.griotold.bankshop.dto.order.OrderRespDto.OrderHistDto;
 import static com.griotold.bankshop.dto.order.OrderRespDto.OrderReturnDto;
 
@@ -53,6 +55,15 @@ public class OrderController {
                                                 @AuthenticationPrincipal LoginUser loginUser) {
         OrderHistDto orderHistDto = orderService.historyList(loginUser.getUser().getId(), orderStatus, pageable);
         return new ResponseEntity<>(new ResponseDto<>(1, "주문 이력 조회", orderHistDto),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/s/orders/v2/login-user")
+    public ResponseEntity<?> retrieveOrderListV2(@RequestParam(value = "status", defaultValue = "ALL") String orderStatus,
+                                               @PageableDefault(size = 5) Pageable pageable,
+                                               @AuthenticationPrincipal LoginUser loginUser) {
+        OrderHistDtoV2 orderHistDtoV2 = orderService.historyListV2(loginUser.getUser().getId(), orderStatus, pageable);
+        return new ResponseEntity<>(new ResponseDto<>(1, "주문 이력 조회 버젼2", orderHistDtoV2),
                 HttpStatus.OK);
     }
 

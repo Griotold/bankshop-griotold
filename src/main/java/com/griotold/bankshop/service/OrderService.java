@@ -5,6 +5,7 @@ import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.order.Order;
+import com.griotold.bankshop.domain.order.OrderQueryRepository;
 import com.griotold.bankshop.domain.order.OrderRepository;
 import com.griotold.bankshop.domain.orderItem.OrderItem;
 import com.griotold.bankshop.domain.orderItem.OrderItemQueryRepository;
@@ -44,6 +45,7 @@ public class OrderService {
     private final OrderItemQueryRepository orderItemQueryRepository;
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     @Transactional
     public OrderReturnDto order(OrderDto orderDto, Long userId) {
@@ -178,7 +180,18 @@ public class OrderService {
                 = orderItemQueryRepository.findOrderItem(orderStatus, pageable);
 
         return new OrderHistDto(userPS, orderItemPG);
+    }
+    /**
+     * 컬렉션 조회 최적화
+     * */
+    public OrderHistDtoV2 historyListV2(Long userId, String orderStatus,
+                                    Pageable pageable) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
 
+        Page<Order> orderPG
+                = orderQueryRepository.findOrderHistory(orderStatus, pageable);
 
+        return new OrderHistDtoV2(userPS, orderPG);
     }
 }

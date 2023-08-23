@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class OrderRespDto {
 
     @Getter
@@ -80,6 +83,55 @@ public class OrderRespDto {
                 this.itemName = orderItem.getItem().getItemName();
                 this.count = orderItem.getCount();
                 this.totalPrice = orderItem.getTotalPrice();
+            }
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class OrderHistDtoV2 {
+        private Long userId;
+        private String username;
+
+        private Page<OrderDto> orderDtoList;
+
+        public OrderHistDtoV2(User user, Page<Order> orderPG) {
+            this.userId = user.getId();
+            this.username = user.getUsername();
+            this.orderDtoList =
+                    orderPG.
+                            map(OrderDto::new);
+        }
+
+        @Getter
+        @Setter
+        public static class OrderDto {
+            private Long orderId;
+            private int orderTotalPrice;
+            private List<OrderItemDto> orderItemDtoList;
+
+
+            public OrderDto(Order order) {
+                this.orderId = order.getId();
+                this.orderTotalPrice = order.getTotalPrice().intValue();
+                this.orderItemDtoList
+                        = order.getOrderItems().stream().map(OrderItemDto::new).collect(Collectors.toList());
+            }
+
+            @Getter
+            @Setter
+            public static class OrderItemDto{
+                private Long itemId;
+                private String itemName;
+                private int count;
+                private int totalPrice;
+
+                public OrderItemDto(OrderItem orderItem) {
+                    this.itemId = orderItem.getItem().getId();
+                    this.itemName = orderItem.getItem().getItemName();
+                    this.count = orderItem.getCount();
+                    this.totalPrice = orderItem.getTotalPrice();
+                }
             }
         }
     }
