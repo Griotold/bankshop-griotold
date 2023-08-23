@@ -53,7 +53,14 @@ public class CartController {
                 = cartService.updateCartItemCount(cartItemUpdateReqDto, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 상품 수량 업데이트 성공", cartItemUpdateRespDto),
                 HttpStatus.CREATED);
+    }
 
+    @DeleteMapping("/s/cart/items/{cartItemId}")
+    public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId,
+                                            @AuthenticationPrincipal LoginUser loginUser) {
+        cartService.deleteCartItem(cartItemId, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 상품 삭제 성공", null),
+                HttpStatus.OK);
     }
 
 }

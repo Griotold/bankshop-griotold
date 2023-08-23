@@ -112,8 +112,6 @@ public class ItemService {
 
     }
 
-
-
     @Transactional
     public void deleteItem(Long itemId) {
         Item itemPS = itemRepository.findById(itemId).orElseThrow(

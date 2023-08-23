@@ -6,6 +6,7 @@ import com.griotold.bankshop.domain.cartItem.CartItem;
 import com.griotold.bankshop.domain.cartItem.CartItemQueryRepository;
 import com.griotold.bankshop.domain.cartItem.CartItemRepository;
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.item.ItemImg;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
@@ -84,5 +85,20 @@ public class CartService {
         cartItemPS.updateCount(cartItemUpdateReqDto.getCount());
 
         return new CartItemUpdateRespDto(cartItemPS);
+    }
+
+    @Transactional
+    public void deleteCartItem(Long cartItemId, Long userId) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+        CartItem cartItemPS = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CustomApiException("장바구니 상품을 찾을 수 없습니다."));
+
+        Cart cartPS = cartItemPS.getCart();
+
+        cartPS.checkOwner(userId);
+
+        cartItemRepository.delete(cartItemPS);
     }
 }
