@@ -13,6 +13,7 @@ import com.griotold.bankshop.domain.transaction.TransactionRepository;
 import com.griotold.bankshop.domain.transaction.TransactionType;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
+import com.griotold.bankshop.dto.cart.CartRespDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import com.griotold.bankshop.ztudy.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.griotold.bankshop.dto.cart.CartRespDto.*;
 import static com.griotold.bankshop.dto.order.OrderReqDto.*;
 import static com.griotold.bankshop.dto.order.OrderRespDto.*;
 
@@ -84,6 +86,53 @@ public class OrderService {
         Order orderPS = orderRepository.save(order);
 
         return new OrderReturnDto(accountPS, orderPS, orderItem);
+    }
+
+    @Transactional
+    public CartOrderRespDto orders(List<OrderCartDto> orderCartDtoList, Long userId,
+                                               Long accountNumber, Long accountPassword) {
+        User userPS = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException("유저를 찾을 수 없습니다."));
+
+        Account accountPS = accountRepository.findByNumber(accountNumber)
+                .orElseThrow(() -> new CustomApiException("계좌를 찾을 수 없습니다."));
+
+        accountPS.checkSamePassword(accountPassword);
+
+        Long amount = 0L;
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for (OrderCartDto orderCartDto : orderCartDtoList) {
+            Item itemPS = itemRepository.findById(orderCartDto.getItemId())
+                    .orElseThrow(() -> new CustomApiException("상품을 찾을 수 없습니다."));
+
+            amount += Long.valueOf(itemPS.getPrice() * orderCartDto.getCount());
+
+            OrderItem orderItem = OrderItem.createOrderItem(itemPS, orderCartDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        accountPS.checkBalance(amount);
+
+        accountPS.withdraw(amount);
+
+        Transaction transaction = Transaction.builder()
+                .withdrawAccount(accountPS)
+                .depositAccount(null)
+                .withdrawAccountBalance(accountPS.getBalance())
+                .depositAccountBalance(null)
+                .amount(amount)
+                .transactionType(TransactionType.TRANSFER)
+                .sender(accountPS.getNumber().toString())
+                .receiver("BANKSHOP")
+                .build();
+        transactionRepository.save(transaction);
+
+        Order order = Order.createOrder(userPS, orderItemList);
+        orderRepository.save(order);
+
+        return new CartOrderRespDto(order, accountPS);
     }
 
     @Transactional

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.griotold.bankshop.dto.cart.CartReqDto.*;
 import static com.griotold.bankshop.dto.cart.CartRespDto.*;
 
@@ -61,6 +64,15 @@ public class CartController {
         cartService.deleteCartItem(cartItemId, loginUser.getUser().getId());
         return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 상품 삭제 성공", null),
                 HttpStatus.OK);
+    }
+
+    @PostMapping("/s/cart/orders")
+    public ResponseEntity<?> orderCart(@RequestBody @Valid CartOrderDto cartOrderDto,
+                                       BindingResult bindingResult,
+                                       @AuthenticationPrincipal LoginUser loginUser) {
+        CartOrderRespDto cartOrderRespDto = cartService.orderCartItem(cartOrderDto, loginUser.getUser().getId());
+        return new ResponseEntity<>(new ResponseDto<>(1, "장바구니 주문 성공", cartOrderRespDto),
+                HttpStatus.CREATED);
     }
 
 }

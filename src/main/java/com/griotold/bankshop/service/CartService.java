@@ -6,21 +6,27 @@ import com.griotold.bankshop.domain.cartItem.CartItem;
 import com.griotold.bankshop.domain.cartItem.CartItemQueryRepository;
 import com.griotold.bankshop.domain.cartItem.CartItemRepository;
 import com.griotold.bankshop.domain.item.Item;
-import com.griotold.bankshop.domain.item.ItemImg;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.User;
 import com.griotold.bankshop.domain.user.UserRepository;
 import com.griotold.bankshop.dto.cart.CartReqDto;
-import com.griotold.bankshop.dto.cart.CartRespDto;
+import com.griotold.bankshop.dto.order.OrderReqDto;
 import com.griotold.bankshop.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.griotold.bankshop.dto.cart.CartReqDto.*;
+import static com.griotold.bankshop.dto.cart.CartReqDto.CartItemDto;
+import static com.griotold.bankshop.dto.cart.CartReqDto.CartItemUpdateReqDto;
 import static com.griotold.bankshop.dto.cart.CartRespDto.*;
+import static com.griotold.bankshop.dto.order.OrderReqDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final CartItemQueryRepository cartItemQueryRepository;
+    private final OrderService orderService;
 
     @Transactional
     public CartAddRespDto addCart(CartItemDto cartItemDto, Long userId) {
@@ -101,4 +108,27 @@ public class CartService {
 
         cartItemRepository.delete(cartItemPS);
     }
+
+    @Transactional
+    public CartOrderRespDto orderCartItem(CartOrderDto cartOrderDto, Long userId) {
+        List<OrderCartDto> orderCartDtoList = new ArrayList<>();
+
+        Cart cartPS = cartRepository.findByUserId(userId);
+        List<CartItem> cartItemList = cartItemRepository.findByCart(cartPS);
+        for (CartItem cartItem : cartItemList) {
+
+            OrderCartDto orderCartDto = new OrderCartDto();
+            orderCartDto.setItemId(cartItem.getItem().getId());
+            orderCartDto.setCount(cartItem.getCount());
+            orderCartDtoList.add(orderCartDto);
+        }
+        CartOrderRespDto cartOrderRespDto = orderService
+                .orders(orderCartDtoList, userId, cartOrderDto.getAccountNumber(), cartOrderDto.getAccountPassword());
+
+        for (CartItem cartItem : cartItemList) {
+            cartItemRepository.delete(cartItem);
+        }
+        return cartOrderRespDto;
+    }
+
 }

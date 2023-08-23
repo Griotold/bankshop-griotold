@@ -1,8 +1,10 @@
 package com.griotold.bankshop.dto.cart;
 
+import com.griotold.bankshop.domain.account.Account;
 import com.griotold.bankshop.domain.cart.Cart;
 import com.griotold.bankshop.domain.cartItem.CartItem;
 import com.griotold.bankshop.domain.item.Item;
+import com.griotold.bankshop.domain.order.Order;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
@@ -68,6 +70,22 @@ public class CartRespDto {
             this.itemName = cartItem.getItem().getItemName();
             this.count = cartItem.getCount();
             this.orderPrice = cartItem.getCount() * cartItem.getItem().getPrice();
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class CartOrderRespDto{
+        private Long orderId;
+        private Long accountNumber;
+        private Long balance;
+        private Long totalPrice;
+
+        public CartOrderRespDto(Order order, Account account) {
+            this.orderId = order.getId();
+            this.accountNumber = account.getNumber();
+            this.balance = account.getBalance();
+            this.totalPrice = order.getTotalPrice().longValue();
         }
     }
 }

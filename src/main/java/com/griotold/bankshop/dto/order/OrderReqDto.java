@@ -1,6 +1,8 @@
 package com.griotold.bankshop.dto.order;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Digits;
@@ -9,6 +11,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class OrderReqDto {
+
+    @Getter
+    @Setter
+    public static class OrderCartDto {
+        private Long itemId;
+
+        private int count;
+    }
+
     @Getter
     @Setter
     public static class OrderDto{
@@ -27,6 +38,7 @@ public class OrderReqDto {
         @Min(value = 1, message = "최소 주문 수량은 1개 입니다.")
         @Max(value = 999, message = "최대 주문 수량은 999개 입니다.")
         private Integer count;
+
     }
     @Getter
     @Setter
