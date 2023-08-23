@@ -70,4 +70,67 @@ public class Transaction {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+    public static Transaction createDepositTransaction(Account account, Long amount, String tel) {
+        return Transaction.builder()
+                .depositAccount(account)
+                .withdrawAccount(null)
+                .depositAccountBalance(account.getBalance())
+                .withdrawAccountBalance(null)
+                .amount(amount)
+                .transactionType(TransactionType.DEPOSIT)
+                .sender("ATM")
+                .receiver(account.getNumber().toString())
+                .tel(tel)
+                .build();
+    }
+    public static Transaction createdWithdrawTransaction(Account account, Long amount){
+        return Transaction.builder()
+                .withdrawAccount(account)
+                .depositAccount(null)
+                .withdrawAccountBalance(account.getBalance())
+                .depositAccountBalance(null)
+                .amount(amount)
+                .transactionType(TransactionType.WITHDRAW)
+                .sender(account.getNumber().toString())
+                .receiver("ATM")
+                .build();
+    }
+    public static Transaction createTransferTransaction(Account withdrawAccount, Account depositAccount,
+                                                        Long amount) {
+        return Transaction.builder()
+                .withdrawAccount(withdrawAccount)
+                .depositAccount(depositAccount)
+                .withdrawAccountBalance(withdrawAccount.getBalance())
+                .depositAccountBalance(depositAccount.getBalance())
+                .amount(amount)
+                .transactionType(TransactionType.TRANSFER)
+                .sender(withdrawAccount.getNumber().toString())
+                .receiver(depositAccount.getNumber().toString())
+                .build();
+    }
+    public static Transaction createOrderTransaction(Account account, Long amount) {
+        return Transaction.builder()
+                .withdrawAccount(account)
+                .depositAccount(null)
+                .withdrawAccountBalance(account.getBalance())
+                .depositAccountBalance(null)
+                .amount(amount)
+                .transactionType(TransactionType.TRANSFER)
+                .sender(account.getNumber().toString())
+                .receiver("BANKSHOP")
+                .build();
+    }
+    public static Transaction createdCancelTransaction(Account account, Long returnAmount) {
+        return Transaction.builder()
+                .withdrawAccount(null)
+                .depositAccount(account)
+                .withdrawAccountBalance(null)
+                .depositAccountBalance(account.getBalance())
+                .amount(returnAmount)
+                .transactionType(TransactionType.TRANSFER)
+                .sender("BANKSHOP")
+                .receiver(account.getNumber().toString())
+                .build();
+    }
+
 }

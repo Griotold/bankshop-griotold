@@ -68,16 +68,7 @@ public class OrderService {
 
         accountPS.withdraw(amount);
 
-        Transaction transaction = Transaction.builder()
-                .withdrawAccount(accountPS)
-                .depositAccount(null)
-                .withdrawAccountBalance(accountPS.getBalance())
-                .depositAccountBalance(null)
-                .amount(amount)
-                .transactionType(TransactionType.TRANSFER)
-                .sender(accountPS.getNumber().toString())
-                .receiver("BANKSHOP")
-                .build();
+        Transaction transaction = Transaction.createOrderTransaction(accountPS, amount);
         transactionRepository.save(transaction);
 
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -119,16 +110,7 @@ public class OrderService {
 
         accountPS.withdraw(amount);
 
-        Transaction transaction = Transaction.builder()
-                .withdrawAccount(accountPS)
-                .depositAccount(null)
-                .withdrawAccountBalance(accountPS.getBalance())
-                .depositAccountBalance(null)
-                .amount(amount)
-                .transactionType(TransactionType.TRANSFER)
-                .sender(accountPS.getNumber().toString())
-                .receiver("BANKSHOP")
-                .build();
+        Transaction transaction = Transaction.createOrderTransaction(accountPS, amount);
         transactionRepository.save(transaction);
 
         Order order = Order.createOrder(userPS, orderItemList);
@@ -156,16 +138,7 @@ public class OrderService {
 
         accountPS.deposit(returnAmount);
 
-        Transaction transaction = Transaction.builder()
-                .withdrawAccount(null)
-                .depositAccount(accountPS)
-                .withdrawAccountBalance(null)
-                .depositAccountBalance(accountPS.getBalance())
-                .amount(returnAmount)
-                .transactionType(TransactionType.TRANSFER)
-                .sender("BANKSHOP")
-                .receiver(accountPS.getNumber().toString())
-                .build();
+        Transaction transaction = Transaction.createdCancelTransaction(accountPS, returnAmount);
         transactionRepository.save(transaction);
 
         orderPS.cancelOrder();

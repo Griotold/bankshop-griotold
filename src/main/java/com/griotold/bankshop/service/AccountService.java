@@ -84,17 +84,10 @@ public class AccountService {
 
         depositAccountPS.deposit(accountDepositReqDto.getAmount());
 
-        Transaction transaction = Transaction.builder()
-                .depositAccount(depositAccountPS)
-                .withdrawAccount(null)
-                .depositAccountBalance(depositAccountPS.getBalance())
-                .withdrawAccountBalance(null)
-                .amount(accountDepositReqDto.getAmount())
-                .transactionType(TransactionType.DEPOSIT)
-                .sender("ATM")
-                .receiver(accountDepositReqDto.getNumber().toString())
-                .tel(accountDepositReqDto.getTel())
-                .build();
+        Transaction transaction
+                = Transaction
+                .createDepositTransaction(depositAccountPS,
+                        accountDepositReqDto.getAmount(), accountDepositReqDto.getTel());
 
         Transaction transactionPS = transactionRepository.save(transaction);
         return new AccountDepositRespDto(depositAccountPS, transactionPS);
@@ -118,16 +111,9 @@ public class AccountService {
 
         withdrawAccountPS.withdraw(accountWithdrawReqDto.getAmount());
 
-        Transaction transaction = Transaction.builder()
-                .withdrawAccount(withdrawAccountPS)
-                .depositAccount(null)
-                .withdrawAccountBalance(withdrawAccountPS.getBalance())
-                .depositAccountBalance(null)
-                .amount(accountWithdrawReqDto.getAmount())
-                .transactionType(TransactionType.WITHDRAW)
-                .sender(accountWithdrawReqDto.getNumber().toString())
-                .receiver("ATM")
-                .build();
+        Transaction transaction
+                = Transaction
+                .createdWithdrawTransaction(withdrawAccountPS, accountWithdrawReqDto.getAmount());
         Transaction transactionPS = transactionRepository.save(transaction);
 
         return new AccountWithdrawRespDto(withdrawAccountPS, transactionPS);
@@ -159,16 +145,9 @@ public class AccountService {
         withdrawAccountPS.withdraw(accountTransferReqDto.getAmount());
         depositAccountPS.deposit(accountTransferReqDto.getAmount());
 
-        Transaction transaction = Transaction.builder()
-                .withdrawAccount(withdrawAccountPS)
-                .depositAccount(depositAccountPS)
-                .withdrawAccountBalance(withdrawAccountPS.getBalance())
-                .depositAccountBalance(depositAccountPS.getBalance())
-                .amount(accountTransferReqDto.getAmount())
-                .transactionType(TransactionType.TRANSFER)
-                .sender(accountTransferReqDto.getWithdrawNumber().toString())
-                .receiver(accountTransferReqDto.getDepositNumber().toString())
-                .build();
+        Transaction transaction
+                = Transaction
+                .createTransferTransaction(withdrawAccountPS, depositAccountPS, accountTransferReqDto.getAmount());
 
         Transaction transactionPS = transactionRepository.save(transaction);
 
