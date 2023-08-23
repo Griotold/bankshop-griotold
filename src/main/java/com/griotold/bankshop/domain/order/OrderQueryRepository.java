@@ -29,9 +29,9 @@ public class OrderQueryRepository extends Querydsl4RepositorySupport {
     private BooleanExpression statusCheck(String orderStatus) {
 
         if (OrderStatus.valueOf(orderStatus) == OrderStatus.ORDER) {
-            return orderItem.order.orderStatus.eq(OrderStatus.ORDER);
+            return order.orderStatus.eq(OrderStatus.ORDER);
         } else if (OrderStatus.valueOf(orderStatus) == OrderStatus.CANCEL) {
-            return orderItem.order.orderStatus.eq(OrderStatus.CANCEL);
+            return order.orderStatus.eq(OrderStatus.CANCEL);
         } else {
             return null;
         }
