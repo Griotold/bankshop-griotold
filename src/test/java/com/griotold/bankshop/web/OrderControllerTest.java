@@ -2,6 +2,8 @@ package com.griotold.bankshop.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.griotold.bankshop.config.dummy.DummyObject;
+import com.griotold.bankshop.domain.account.Account;
+import com.griotold.bankshop.domain.account.AccountRepository;
 import com.griotold.bankshop.domain.item.Item;
 import com.griotold.bankshop.domain.item.ItemRepository;
 import com.griotold.bankshop.domain.user.User;
@@ -49,6 +51,9 @@ class OrderControllerTest extends DummyObject {
     private UserRepository userRepository;
 
     @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
     ItemRepository itemRepository;
 
     @Autowired
@@ -66,8 +71,10 @@ class OrderControllerTest extends DummyObject {
         // given
         OrderDto orderDto = new OrderDto();
         Item item = itemRepository.findByItemName("츄르").get();
+        orderDto.setAccountNumber(1111L);
+        orderDto.setAccountPassword(1234L);
         orderDto.setItemId(item.getId());
-        orderDto.setCount(30);
+        orderDto.setCount(3);
         String requestBody = om.writeValueAsString(orderDto);
         log.debug("테스트 : {}", requestBody);
 
@@ -140,6 +147,8 @@ class OrderControllerTest extends DummyObject {
 
     private void dataSet() {
         User griotold = userRepository.save(newUser("griotold", "고리오영감"));
+
+        Account account = accountRepository.save(newAccount4Order(1111L, griotold));
 
         Item snack4Cat = itemRepository.save(newItem("츄르"));
         Item sweeper = itemRepository.save(newItem("안경닦이"));

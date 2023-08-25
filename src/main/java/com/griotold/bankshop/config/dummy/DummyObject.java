@@ -102,6 +102,15 @@ public class DummyObject {
                 .build();
     }
 
+    protected Account newAccount4Order(Long number, User user) {
+        return Account.builder()
+                .number(number)
+                .password(1234L)
+                .balance(100000L)
+                .user(user)
+                .build();
+    }
+
     protected Account newMockAccount(Long id, Long number, Long balance, User user) {
         return Account.builder()
                 .id(id)

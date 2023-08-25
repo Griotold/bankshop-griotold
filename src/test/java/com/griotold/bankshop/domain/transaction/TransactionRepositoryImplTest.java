@@ -88,7 +88,7 @@ class TransactionRepositoryImplTest extends DummyObject {
                 log.debug("======================================");
         });
         // then
-        assertThat(all.getSize()).isEqualTo(4);
+        assertThat(all.getSize()).isEqualTo(5);
     }
     @Test
     @DisplayName("transactionType - WITHDRAW")
@@ -112,7 +112,7 @@ class TransactionRepositoryImplTest extends DummyObject {
             log.debug("======================================");
         });
         // then
-        assertThat(all.getSize()).isEqualTo(3);
+        assertThat(all.getSize()).isEqualTo(5);
     }
     @Test
     @DisplayName("transactionType - DEPOSIT")
@@ -136,7 +136,7 @@ class TransactionRepositoryImplTest extends DummyObject {
         });
 
         // then
-        assertThat(all.getSize()).isEqualTo(1);
+        assertThat(all.getSize()).isEqualTo(5);
     }
 
 

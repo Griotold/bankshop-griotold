@@ -586,7 +586,7 @@ class AccountControllerTest extends DummyObject {
 
         // then
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.msg").value("계좌 상세 보기 성공"));
+        resultActions.andExpect(jsonPath("$.msg").value("계좌 상세보기 성공"));
     }
 
     @WithUserDetails(value = "kandela", setupBefore = TestExecutionEvent.TEST_EXECUTION)
