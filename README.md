@@ -122,4 +122,7 @@
 1. `XXXToOne` 관계는 모두 `fetch join`한다
 2. 컬렉션은 지연 로딩 한다.
 3. `hibernate.default.batch_fetch_size` 설정으로 `N + 1` 문제를 해결한다.
--
+- [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/%EC%BB%AC%EB%A0%89%EC%85%98%20%ED%8E%98%EC%9D%B4%EC%A7%95.pdf)
+
+## 4. AWS를 활용한 HTTPS 배포
+- Elastic Beanstalk
