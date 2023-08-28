@@ -58,16 +58,16 @@
 ## 2. API 
 - https://www.griotold.shop/api/accounts/deposit
 - Request Body
-'''
+```
 {
     "number" : "1111",
     "amount" : 100000,
     "transactionType" : "DEPOSIT",
     "tel" : "01012345678"
 }
-'''
+```
 - Response Body
-'''
+```
 {
     "code": 1,
     "msg": "계좌 입금 완료",
@@ -85,7 +85,7 @@
         }
     }
 }
-'''
+```
 
 
 
