@@ -419,3 +419,283 @@
     }
 }
 ```
+
+## 상품 등록 - 관리자
+- https://www.griotold.shop/api/admin/items
+- POST
+### Request Body
+```
+{
+    "itemName": "연필",
+    "price": 7000,
+    "stockNumber": 70,
+    "itemDetail": "연필 상세 설명",
+    "imgName": "연필 이미지.jpg",
+    "oriImgName": "연필 원본이미지.jpg",
+    "imgUrl": "www.pencil.com"
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "아이템 등록 성공",
+    "data": {
+        "id": 4,
+        "itemName": "연필",
+        "price": 7000,
+        "stockNumber": 70,
+        "itemSellStatus": "SELL",
+        "itemImgId": 4
+    }
+}
+```
+
+## 상품 목록 조회 - 고객용
+- https://www.griotold.shop/api/items
+- GET
+### Responseo body
+```
+{
+    "code": 1,
+    "msg": "상품 리스트",
+    "data": {
+        "itemDtos": {
+            "content": [
+                {
+                    "id": 1,
+                    "itemName": "츄르",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SELL",
+                    "imgName": "츄르 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                },
+                {
+                    "id": 2,
+                    "itemName": "안경닦이",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SELL",
+                    "imgName": "안경닦이 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                },
+                {
+                    "id": 3,
+                    "itemName": "물티슈",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SELL",
+                    "imgName": "물티슈 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                },
+                {
+                    "id": 4,
+                    "itemName": "연필",
+                    "price": 7000,
+                    "stockNumber": 70,
+                    "itemSellStatus": "SELL",
+                    "imgName": "연필 이미지.jpg",
+                    "oriImgName": "연필 원본이미지.jpg",
+                    "imgUrl": "www.pencil.com"
+                }
+            ],
+            "pageable": {
+                "sort": {
+                    "empty": true,
+                    "sorted": false,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "pageNumber": 0,
+                "pageSize": 5,
+                "paged": true,
+                "unpaged": false
+            },
+            "last": true,
+            "totalPages": 1,
+            "totalElements": 4,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "empty": true,
+                "sorted": false,
+                "unsorted": true
+            },
+            "first": true,
+            "numberOfElements": 4,
+            "empty": false
+        }
+    }
+}
+```
+
+## 상품 목록 조회 - 관리자용
+- https://www.griotold.shop/api/admin/items?status=SOLD_OUT
+- GET
+- 쿼리파라미터
+  - status
+    - SELL
+    - SOLD_OUT
+  - page
+  - size 
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "관리자용 상품 목록",
+    "data": {
+        "itemDtos": {
+            "content": [
+                {
+                    "id": 1,
+                    "itemName": "츄르",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SOLD_OUT",
+                    "imgName": "츄르 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                },
+                {
+                    "id": 2,
+                    "itemName": "안경닦이",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SOLD_OUT",
+                    "imgName": "안경닦이 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                },
+                {
+                    "id": 3,
+                    "itemName": "물티슈",
+                    "price": 10000,
+                    "stockNumber": 100,
+                    "itemSellStatus": "SOLD_OUT",
+                    "imgName": "물티슈 이미지",
+                    "oriImgName": "원본 이미지명",
+                    "imgUrl": "www.test.com"
+                }
+            ],
+            "pageable": {
+                "sort": {
+                    "empty": true,
+                    "sorted": false,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "pageNumber": 0,
+                "pageSize": 5,
+                "paged": true,
+                "unpaged": false
+            },
+            "last": true,
+            "totalPages": 1,
+            "totalElements": 3,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "empty": true,
+                "sorted": false,
+                "unsorted": true
+            },
+            "first": true,
+            "numberOfElements": 4,
+            "empty": false
+        }
+    }
+}
+```
+
+## 상품 상세 - 고객용
+- https://www.griotold.shop/api/items/{itemId}
+- GET
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "1번 상품",
+    "data": {
+        "id": 1,
+        "itemName": "츄르",
+        "price": 10000,
+        "stockNumber": 100,
+        "itemSellStatus": "SELL",
+        "imgName": "츄르 이미지",
+        "oriImgName": "원본 이미지명",
+        "imgUrl": "www.test.com"
+    }
+}
+```
+
+## 상품 상세 - 관리자용
+- https://www.griotold.shop/api/admin/items/{itemId}
+- GET
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "2번 상품",
+    "data": {
+        "id": 2,
+        "itemName": "안경닦이",
+        "price": 10000,
+        "stockNumber": 100,
+        "itemSellStatus": "SOLD_OUT",
+        "imgName": "안경닦이 이미지",
+        "oriImgName": "원본 이미지명",
+        "imgUrl": "www.test.com"
+    }
+}
+```
+
+## 상품 수정 - 관리자용
+- https://www.griotold.shop/api/admin/items/{itemId}
+- PUT
+### Request Body
+```
+{
+    "itemId" : 3,
+    "price": 4446,
+    "stockNumber": 4444,
+    "itemSellStatus" : "SOLD_OUT",
+    "imgName": "수정33 이미지.jpg",
+    "oriImgName": "수정33 원본이미지.jpg",
+    "imgUrl": "www.editpe333ncil.com"
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "상품 수정 완료",
+    "data": {
+        "id": 3,
+        "itemName": "물티슈",
+        "price": 4446,
+        "stockNumber": 4444,
+        "itemDetail": "테스트 아이템 설명",
+        "itemSellStatus": "SOLD_OUT",
+        "itemImgId": 3,
+        "imgName": "수정33 이미지.jpg",
+        "oriImgName": "수정33 원본이미지.jpg",
+        "imgUrl": "www.editpe333ncil.com"
+    }
+}
+```
+
+## 상품 삭제 - 관리자용
+- https://www.griotold.shop/api/admin/items/{itemId}
+- DELETE
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "상품 삭제 완료",
+    "data": null
+}
+```
