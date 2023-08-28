@@ -699,3 +699,269 @@
     "data": null
 }
 ```
+
+## 주문 요청
+- https://www.griotold.shop/api/s/orders
+- POST
+### Request Body
+```
+{
+    "accountNumber" : 1111,
+    "accountPassword" : 1234,
+    "itemId":3,
+    "count":2
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "주문 완료",
+    "data": {
+        "accountNumber": 1111,
+        "balance": 80800,
+        "orderId": 1,
+        "orderDate": "2023-08-28 12:30:32",
+        "orderStatus": "주문",
+        "orderItemDto": {
+            "itemId": 3,
+            "itemName": "물티슈",
+            "count": 2,
+            "totalPrice": 20000
+        }
+    }
+}
+```
+
+## 주문 취소
+- https://www.griotold.shop/api/s/orders/{orderId}
+- POST
+### Request Body
+```
+{
+    "accountNumber" : 1111,
+    "orderId":1
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "주문 취소 완료",
+    "data": null
+}
+```
+
+## 주문 이력 조회
+- https://www.griotold.shop/api/s/orders/v2/login-user
+- GET
+- 쿼리 파라미터
+  - page
+  - size
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "주문 이력 조회 버젼2",
+    "data": {
+        "userId": 2,
+        "username": "griotold",
+        "orderDtoList": {
+            "content": [
+                {
+                    "orderId": 1,
+                    "orderTotalPrice": 20000,
+                    "orderItemDtoList": [
+                        {
+                            "itemId": 3,
+                            "itemName": "물티슈",
+                            "count": 2,
+                            "totalPrice": 20000
+                        }
+                    ]
+                },
+                {
+                    "orderId": 2,
+                    "orderTotalPrice": 20000,
+                    "orderItemDtoList": [
+                        {
+                            "itemId": 2,
+                            "itemName": "안경닦이",
+                            "count": 2,
+                            "totalPrice": 20000
+                        }
+                    ]
+                }
+            ],
+            "pageable": {
+                "sort": {
+                    "empty": true,
+                    "sorted": false,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "pageNumber": 0,
+                "pageSize": 5,
+                "unpaged": false,
+                "paged": true
+            },
+            "last": true,
+            "totalElements": 2,
+            "totalPages": 1,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "empty": true,
+                "sorted": false,
+                "unsorted": true
+            },
+            "first": true,
+            "numberOfElements": 2,
+            "empty": false
+        }
+    }
+}
+```
+
+## 장바구니 담기
+- https://www.griotold.shop/api/s/cart/items
+- POST
+### Request Body
+```
+{
+    "itemId":3,
+    "count":2
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "장바구니 담기 성공",
+    "data": {
+        "itemId": 3,
+        "itemName": "물티슈",
+        "count": 2,
+        "orderPrice": 20000
+    }
+}
+```
+
+## 장바구니 목록 조회
+- https://www.griotold.shop/api/s/cart/items
+- GET
+- 쿼리 파라미터
+  - page
+  - size
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "장바구니 목록 보기",
+    "data": {
+        "cartItems": {
+            "content": [
+                {
+                    "cartItemId": 1,
+                    "itemName": "물티슈",
+                    "price": 10000,
+                    "count": 2,
+                    "orderPrice": 20000
+                },
+                {
+                    "cartItemId": 2,
+                    "itemName": "안경닦이",
+                    "price": 10000,
+                    "count": 2,
+                    "orderPrice": 20000
+                }
+            ],
+            "pageable": {
+                "sort": {
+                    "empty": true,
+                    "sorted": false,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "pageNumber": 0,
+                "pageSize": 5,
+                "unpaged": false,
+                "paged": true
+            },
+            "last": true,
+            "totalElements": 2,
+            "totalPages": 1,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "empty": true,
+                "sorted": false,
+                "unsorted": true
+            },
+            "first": true,
+            "numberOfElements": 2,
+            "empty": false
+        }
+    }
+}
+```
+
+## 장바구니 상품 수량 수정
+- https://www.griotold.shop/api/s/cart/items/{itemId}
+- PUT
+### Request Body
+```
+{
+    "cartItemId" : 2,
+    "count": 5
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "장바구니 상품 수량 업데이트 성공",
+    "data": {
+        "cartItemId": 2,
+        "itemName": "안경닦이",
+        "count": 5,
+        "orderPrice": 50000
+    }
+}
+```
+
+## 장바구니 상품 삭제
+- https://www.griotold.shop/api/s/cart/items/{itemId}
+- DELETE
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "장바구니 상품 삭제 성공",
+    "data": null
+}
+```
+
+## 장바구니 상품 주문
+- https://www.griotold.shop/api/s/cart/orders
+- POST
+### Request Body
+```
+{
+    "accountNumber":1111,
+    "accountPassword":1234
+}
+```
+### Response Body
+```
+{
+    "code": 1,
+    "msg": "장바구니 주문 성공",
+    "data": {
+        "orderId": 3,
+        "accountNumber": 1111,
+        "balance": 80800,
+        "totalPrice": 100000
+    }
+}
+```
