@@ -131,6 +131,7 @@
 - [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/Route%2053%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%97%B0%EB%8F%99.pdf)
 
 # References
+- https://www.youtube.com/playlist?list=PLuHgQVnccGMCas8a4f0uIg5X4uERoG6gb
 - https://github.com/codingspecialist/junit-bank-class
 - https://github.com/in28minutes/spring-boot-master-class
 - https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard
