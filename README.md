@@ -32,27 +32,27 @@
 
 # 프로젝트 수행 과정
 ### 08.01 ~ 08.08 
-- Spring Security JWT 세팅 및 로그인, 회원가입 기능 구현
-- Swagger 세팅 
-- @RestControllerAdvice를 통한 공통 예외 처리
-- Spring AOP를 통한 Validation
+- `Spring Security JWT` 세팅 및 로그인, 회원가입 기능 구현
+- `Swagger` 세팅 
+- `@RestControllerAdvice`를 통한 공통 예외 처리
+- `Spring AOP`를 통한 `Validation`
 - 은행 관련 기능
   - 계좌 생성, 삭제, 조회, 상세조회
   - 계좌 입금, 출금, 이체
 
 ### 08.09 ~ 08.16
-- QueryDSL 복습 : [실전! Querydsl](https://www.inflearn.com/course/querydsl-%EC%8B%A4%EC%A0%84)
-- Spring Data Jpa 복습 : [실전! 스프링 데이터 JPA](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA-%EC%8B%A4%EC%A0%84/dashboard)
+- `QueryDSL` 복습 : [실전! Querydsl](https://www.inflearn.com/course/querydsl-%EC%8B%A4%EC%A0%84)
+- `Spring Data Jpa` 복습 : [실전! 스프링 데이터 JPA](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA-%EC%8B%A4%EC%A0%84/dashboard)
 
 ### 08.17 ~ 08.23
 - 쇼핑몰 관련 기능
   - 상품
   - 주문, 주문 아이템
   - 장바구니
-- N + 1문제 해결과 컬렉션 페이징 조회를 위한 복습 : [실전! 스프링 부트와 JPA 활용2 - API 개발과 성능 최적화](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard)
+- `N + 1`문제 해결과 컬렉션 페이징 조회를 위한 복습 : [실전! 스프링 부트와 JPA 활용2 - API 개발과 성능 최적화](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard)
 
 ### 08.24 ~ 08.28
-- AWS를 활용한 HTTPS 배포
+- `AWS`를 활용한 `HTTPS` 배포
 - 문서화 작업
 
 # ERD
@@ -125,4 +125,17 @@
 - [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/%EC%BB%AC%EB%A0%89%EC%85%98%20%ED%8E%98%EC%9D%B4%EC%A7%95.pdf)
 
 ## 4. AWS를 활용한 HTTPS 배포
-- Elastic Beanstalk
+- [Elastic Beanstalk](https://github.com/Griotold/bankshop-griotold/blob/master/docs/IaaS%2C%20PaaS.pdf) 로 프로젝트를 배포
+- `Route 53`으로 `www.griotold.shop`이라는 도메인을 연동
+- `AWS Certificate Manager`을 활용하여 HTTPS 적용
+- [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/Route%2053%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%97%B0%EB%8F%99.pdf)
+
+# References
+- https://github.com/codingspecialist/junit-bank-class
+- https://github.com/in28minutes/spring-boot-master-class
+- https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard
+- https://www.inflearn.com/course/querydsl-%EC%8B%A4%EC%A0%84
+- https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA-%EC%8B%A4%EC%A0%84
+- https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94
+- https://jwt.io/
+- https://velog.io/@jonghyun3668/EC2-%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EB%8F%99-%EB%B0%8F-https-%EC%84%B8%ED%8C%85%ED%95%98%EA%B8%B0
