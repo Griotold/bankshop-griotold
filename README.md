@@ -14,6 +14,7 @@
   - JWT 4.2.1
   - Swagger 3.0.0
   - LucidChart : ERD 툴
+  - Postman
   - Docker
   - AWS
     - Elastic BeanStalk
@@ -51,5 +52,42 @@
 - 문서화 작업
 
 # 중요 포인트
-## ERD
+## 1. ERD
 ![bankshop_ERD](https://github.com/Griotold/Portfolio/assets/101307758/dfc430ce-623a-40fd-84ff-5b54670a986a)
+
+## 2. API 
+- https://www.griotold.shop/api/accounts/deposit
+- Request Body
+'''
+{
+    "number" : "1111",
+    "amount" : 100000,
+    "transactionType" : "DEPOSIT",
+    "tel" : "01012345678"
+}
+'''
+- Response Body
+'''
+{
+    "code": 1,
+    "msg": "계좌 입금 완료",
+    "data": {
+        "id": 1,
+        "number": 1111,
+        "transactionDto": {
+            "id": 6,
+            "transactionType": "입금",
+            "sender": "ATM",
+            "receiver": "1111",
+            "amount": 100000,
+            "tel": "01012345678",
+            "createdAt": "2023-08-28 11:02:51"
+        }
+    }
+}
+'''
+
+
+
+
+
