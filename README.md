@@ -115,5 +115,11 @@
 - `Spring Bean Validation`으로 사용자의 입력을 검사할 수 있다.
 - 유효성 검사는 하나의 서비스에만 국한된 것이 아니고 `Request Body`가 들어가는 모든 요청에 공통 관심사다.
 - `AOP`를 도입하여 `Request Body`의 유효성 검사를 처리하는 방식으로 구현했다.
+- [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85%20%EC%BB%A8%ED%8A%B8%EB%A1%A4%EB%9F%AC%20%EC%9C%A0%ED%9A%A8%EC%84%B1%EA%B2%80%EC%82%AC%20AOP%20%EC%A0%81%EC%9A%A9.pdf)
 
-
+## 3. 컬렉션 조회와 페이징 
+- 컬렉션을 조회하는데 페이징을 하려면 다음 3가지 규칙을 따라야 한다.
+1. `XXXToOne` 관계는 모두 `fetch join`한다
+2. 컬렉션은 지연 로딩 한다.
+3. `hibernate.default.batch_fetch_size` 설정으로 `N + 1` 문제를 해결한다.
+-
