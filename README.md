@@ -25,8 +25,9 @@
 - 기간 : 2023.08.01~2023.08.28
 
 # 프로젝트 목적
-- 평소에 농협 모바일 앱 NH콕뱅크를 자주 사용하고 있다. NH콕뱅크 앱은 계좌 이체와 같은 은행 관련 기능뿐만 계좌와 연동하여 쇼핑몰 서비스를 제공하고 있다.
-- 해당 앱의 백엔드 단계에서는 어떻게 처리되고 있을까를 상상해보며 데이터베이스를 구축해보고 Spring Framework를 통하여 로직을 구현해봤다.
+- 평소에 농협 모바일 앱 NH콕뱅크를 자주 사용하고 있다.
+- NH콕뱅크 앱은 계좌 이체와 같은 은행 관련 기능뿐만 계좌와 연동하여 쇼핑몰 서비스를 제공하고 있다.
+- NH콕뱅크 애플리케이션은 백엔드 단계에서 어떻게 처리되고 있을까를 상상해보며 데이터베이스를 구축해보고 Spring Framework를 통하여 로직을 구현해봤다.
 
 # 프로젝트 수행 과정
 ### 08.01 ~ 08.08 
@@ -39,15 +40,15 @@
   - 계좌 입금, 출금, 이체
 
 ### 08.09 ~ 08.16
-- QueryDSL 복습 : https://www.inflearn.com/course/querydsl-%EC%8B%A4%EC%A0%84
-- Spring Data Jpa 복습 : https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA-%EC%8B%A4%EC%A0%84/dashboard
+- QueryDSL 복습 : [실전! Querydsl](https://www.inflearn.com/course/querydsl-%EC%8B%A4%EC%A0%84)
+- Spring Data Jpa 복습 : [실전! 스프링 데이터 JPA](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-JPA-%EC%8B%A4%EC%A0%84/dashboard)
 
 ### 08.17 ~ 08.23
 - 쇼핑몰 관련 기능
   - 상품
   - 주문, 주문 아이템
   - 장바구니
-- N + 1문제 해결과 컬렉션 페이징 조회를 위한 복습 : https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard
+- N + 1문제 해결과 컬렉션 페이징 조회를 위한 복습 : [실전! 스프링 부트와 JPA 활용2 - API 개발과 성능 최적화](https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard)
 
 ### 08.24 ~ 08.28
 - AWS를 활용한 HTTPS 배포
