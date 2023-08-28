@@ -56,6 +56,8 @@
 ![bankshop_ERD](https://github.com/Griotold/Portfolio/assets/101307758/dfc430ce-623a-40fd-84ff-5b54670a986a)
 
 ## 2. API 
+- [자세한 사항은 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/api.md)
+### 예시 - 계좌 입금
 - https://www.griotold.shop/api/accounts/deposit
 - Request Body
 ```
