@@ -5,29 +5,30 @@
   - 비용 문제로 서비스 종료  
 - 깃허브 : https://github.com/Griotold/bankshop-griotold
 - 사용 툴
-  - Java 11
-  - Spring 2.7.14
-  - QueryDSL 5.0.0
-  - JPA
-  - Spring Security
-  - MySql 8
-  - h2
-  - JWT 4.2.1
-  - Swagger 3.0.0
-  - LucidChart : ERD 툴
-  - Postman
-  - Docker
-  - AWS
-    - Elastic BeanStalk
-    - Route 53
-    - AWS Certificate Manager
+  - `Java 11`
+  - `Spring 2.7.14`
+  - `QueryDSL 5.0.0`
+  - `JPA`
+  - `Spring Security`
+  - `MySql 8`
+  - `h2`
+  - `JWT 4.2.1`
+  - `Swagger 3.0.0`
+  - `LucidChart` : ERD 툴
+  - `Postman`
+  - `Docker`
+  - `AWS`
+    - `Elastic BeanStalk`
+    - `Route 53`
+    - `AWS Certificate Manager`
 - 인원 : 1명
 - 기간 : 2023.08.01~2023.08.28
 
 # 프로젝트 목적
-- 평소에 농협 모바일 앱 NH콕뱅크를 자주 사용하고 있다.
-- NH콕뱅크 앱은 계좌 이체와 같은 은행 관련 기능뿐만 계좌와 연동하여 쇼핑몰 서비스를 제공하고 있다.
-- NH콕뱅크 애플리케이션은 백엔드 단계에서 어떻게 처리되고 있을까를 상상해보며 데이터베이스를 구축해보고 Spring Framework를 통하여 로직을 구현해봤다.
+- 평소에 농협 모바일 앱 `NH콕뱅크`를 자주 사용하고 있다.
+- `NH콕뱅크` 앱은 계좌 이체와 같은 은행 관련 기능뿐만 계좌와 연동하여 쇼핑몰 서비스를 제공하고 있다.
+- `NH콕뱅크` 앱은 백엔드 단계에서 어떻게 처리되고 있을까를 상상해보며 데이터베이스를 구축해보고
+- `Spring Framework`를 활용하여 로직을 구현해봤다.
 
 # 프로젝트 수행 과정
 ### 08.01 ~ 08.08 
@@ -91,7 +92,28 @@
 }
 ```
 
+# 중요 포인트
+## 1. @ExceptionHandler와 @RestControllerAdvice를 통한 예외처리
+### @ExceptionHandler
+- 스프링은 `API` 예외 처리 문제를 해결하기 위해 `@ExceptionHandler` 라는 애노테이션을 사용하는 매우 편리한 예외 처리 기능을 제공하는데,
+- 이것이 바로 `ExceptionHandlerExceptionResolver` 이다.
+- 스프링은 `ExceptionHandlerExceptionResolver` 를 기본으로 제공하고,
+- 기본으로 제공하는 `ExceptionResolver` 중에 우선순위도 가장 높다.
+- 실무에서 `API` 예외 처리는 대부분 이 기능을 사용한다.
 
+### @RestControllerAdvice
+- `@ExceptionHandler` 를 사용해서 예외를 깔끔하게 처리할 수 있게 되었지만,
+- `@ExceptionHandler` 만 사용하면 정상 코드와 예외 처리 코드가 하나의 컨트롤러에 섞여 있게 된다.
+- `@ControllerAdvice` 또는 `@RestControllerAdvice` 를 사용하면 둘을 분리할 수 있다.
+    - 둘의 차이는 그냥 `@ResponseBody` 차이
 
+### CustomExceptionHandler
+- 스프링이 제공하는 두 기능을 활용하여 예외 처리를 적용했다.
+- [자세한건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/src/main/java/com/griotold/bankshop/handler/CustomExceptionalHandler.java)
+
+## 2. AOP를 활용하여 Validation
+- `Spring Bean Validation`으로 사용자의 입력을 검사할 수 있다.
+- 유효성 검사는 하나의 서비스에만 국한된 것이 아니고 `Request Body`가 들어가는 모든 요청에 공통 관심사다.
+- `AOP`를 도입하여 `Request Body`의 유효성 검사를 처리하는 방식으로 구현했다.
 
 
