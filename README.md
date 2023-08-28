@@ -13,6 +13,7 @@
   - h2
   - JWT 4.2.1
   - Swagger 3.0.0
+  - LucidChart : ERD 툴
   - Docker
   - AWS
     - Elastic BeanStalk
@@ -48,3 +49,7 @@
 ### 08.24 ~ 08.28
 - AWS를 활용한 HTTPS 배포
 - 문서화 작업
+
+# 중요 포인트
+## ERD
+![bankshop_ERD](https://github.com/Griotold/Portfolio/assets/101307758/dfc430ce-623a-40fd-84ff-5b54670a986a)
