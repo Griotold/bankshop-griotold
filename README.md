@@ -9,6 +9,7 @@
   - Spring 2.7.14
   - QueryDSL 5.0.0
   - JPA
+  - Spring Security
   - MySql 8
   - h2
   - JWT 4.2.1
