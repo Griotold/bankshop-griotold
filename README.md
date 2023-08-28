@@ -31,7 +31,7 @@
 ### 08.01 ~ 08.08 
 - Spring Security JWT 세팅 및 로그인, 회원가입 기능 구현
 - Swagger 세팅 
-- @ControllerAdvice를 통한 공통 예외 처리
+- @RestControllerAdvice를 통한 공통 예외 처리
 - Spring AOP를 통한 Validation
 - 은행 관련 기능
   - 계좌 생성, 삭제, 조회, 상세조회
@@ -46,6 +46,7 @@
   - 상품
   - 주문, 주문 아이템
   - 장바구니
+- N + 1문제 해결과 컬렉션 페이징 조회를 위한 복습 : https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-JPA-API%EA%B0%9C%EB%B0%9C-%EC%84%B1%EB%8A%A5%EC%B5%9C%EC%A0%81%ED%99%94/dashboard
 
 ### 08.24 ~ 08.28
 - AWS를 활용한 HTTPS 배포
