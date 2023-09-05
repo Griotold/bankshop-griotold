@@ -6,7 +6,7 @@
 - 깃허브 : https://github.com/Griotold/bankshop-griotold
 - 사용 툴
   - `Java 11`
-  - `Spring 2.7.14`
+  - `Spring Boot 2.7.14`
   - `QueryDSL 5.0.0`
   - `JPA`
   - `Spring Security`
