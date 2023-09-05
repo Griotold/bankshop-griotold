@@ -13,7 +13,7 @@
   - `MySql 8`
   - `h2`
   - `JWT 4.2.1`
-  - Junit 5
+  - `Junit 5`
   - `Swagger 3.0.0`
   - `LucidChart` : ERD 툴
   - `Postman`
