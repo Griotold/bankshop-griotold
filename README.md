@@ -1,6 +1,6 @@
 # bankshop-griotold
 ## 은행 거래 및 쇼핑몰 서비스 REST API
-
+![image](https://github.com/Griotold/myblog/assets/101307758/f8030ce7-d315-4085-816b-3a204091985c)
 - 사이트 주소 : https://www.griotold.shop
   - 비용 문제로 서비스 종료  
 - 깃허브 : https://github.com/Griotold/bankshop-griotold
@@ -14,6 +14,7 @@
   - `h2`
   - `JWT 4.2.1`
   - `Junit 5`
+  - `jacoco 0.8.9`
   - `Swagger 3.0.0`
   - `LucidChart` : ERD 툴
   - `Postman`
@@ -130,6 +131,10 @@
 - `Route 53`으로 `www.griotold.shop`이라는 도메인을 연동
 - `AWS Certificate Manager`을 활용하여 HTTPS 적용
 - [자세한 건 여기를 클릭!](https://github.com/Griotold/bankshop-griotold/blob/master/docs/Route%2053%20%EB%8F%84%EB%A9%94%EC%9D%B8%20%EC%97%B0%EB%8F%99.pdf)
+
+## 5. jacoco 플러그인 테스트 커버리지 확인
+- 현재 프로젝트는 테스트 코드 커버리지가 58%이다.(라인 커버리지 기준)
+<img width="953" alt="image" src="https://github.com/Griotold/myblog/assets/101307758/fdb982e8-3ff4-43e1-a923-8debe9ccae16">
 
 # References
 - https://www.youtube.com/playlist?list=PLuHgQVnccGMCas8a4f0uIg5X4uERoG6gb
