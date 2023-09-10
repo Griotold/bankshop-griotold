@@ -10,12 +10,12 @@ spring:
     url: jdbc:mysql://${RDS_HOSTNAME:localhost}:${RDS_PORT:3306}/${RDS_DB_NAME:bank-shop-database}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${RDS_USERNAME:bank-shop-user}
-    password: ${RDS_PASSWORD:dummypassword}
+    password: ${RDS_PASSWORD:dummy}
 
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       '[hibernate.default_batch_fetch_size]': 100
 
